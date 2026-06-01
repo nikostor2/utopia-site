@@ -21,11 +21,12 @@
   --radius-dock: 16px;
   --radius-pill: 160px;
 
-  --space-page: clamp(16px, 8.47vw, 32px);
+  --app-width: 100%;
+  --space-page: clamp(16px, 5.5vw, 32px);
   --space-gutter: 10px;
-  --max-width: min(378px, 100vw);
-  --content-width: min(314px, calc(100vw - var(--space-page) * 2));
-  --days-stage-max: min(412px, calc(100vw - var(--space-page) * 2));
+  --max-width: min(378px, var(--app-width));
+  --content-width: min(314px, calc(var(--app-width) - var(--space-page) * 2));
+  --days-stage-max: min(412px, calc(var(--app-width) - var(--space-page) * 2));
 
   --dock-height: 40px;
   --dock-offset: 10px;

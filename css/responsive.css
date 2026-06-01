@@ -1,80 +1,61 @@
-/* Fluid width on all phones — design cap 378px via --max-width in tokens.css */
+/* Phones & tablets — full device width (iPhone 17 ≈ 393px logical) */
 
 html {
+  width: 100%;
   overflow-x: hidden;
 }
 
 body {
+  width: 100%;
   overflow-x: hidden;
   padding-bottom: var(--dock-safe);
 }
 
+@media (max-width: 520px) {
+  :root {
+    --max-width: 100%;
+    --space-page: max(20px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  }
+}
+
 .page,
-.menu {
+.menu,
+:is(.hero, .ecosystem, .opening__sticky, .beyond, .days, .cta-final, .footer) {
   width: 100%;
   max-width: var(--max-width);
 }
 
-/* Inset blocks: was 32px + 314px fixed */
-:is(
-  .days__intro,
-  .beyond__intro,
-  .opening__content,
-  .opening__copy,
-  .opening__footer,
-  .cta-final__content,
-  .footer__inner
-) {
-  left: var(--space-page);
-  right: var(--space-page);
+.opening__content,
+.opening__copy,
+.opening__footer,
+.opening__eyebrow,
+.opening__title,
+.opening__body {
   width: auto;
-}
-
-:is(
-  .days__title,
-  .days__body,
-  .beyond__title,
-  .beyond__lead,
-  .beyond__meta,
-  .beyond__desc,
-  .beyond__card-title,
-  .opening__eyebrow,
-  .opening__title,
-  .opening__body,
-  .cta-final__title,
-  .cta-final__content,
-  .footer__label,
-  .footer__dest-list,
-  .footer__links,
-  .footer__destinations,
-  .footer__legal,
-  .footer__links a
-) {
-  width: 100%;
   max-width: none;
 }
 
-.beyond__card {
-  left: var(--space-page);
-  right: var(--space-page);
-  width: auto;
+.opening__bg-media,
+.opening__bg-stack {
+  left: 50% !important;
+  right: auto !important;
+  width: 140% !important;
+  max-width: none !important;
+  height: 100% !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  top: 0 !important;
+  object-fit: cover;
 }
 
-.beyond__image-wrap {
-  width: 100%;
+.opening__bg-stack img {
+  object-fit: cover;
 }
 
 .beyond__image {
   width: 100%;
   height: auto;
   aspect-ratio: 314 / 200;
-}
-
-.ecosystem__tabs {
-  width: calc(100% - var(--space-page) * 2);
-  left: var(--space-page);
-  right: auto;
-  max-width: none;
 }
 
 .days__progress {
@@ -89,14 +70,6 @@ body {
 
 .footer__legal {
   flex-wrap: wrap;
-  gap: 8px 14px;
-}
-
-.footer__legal span,
-.footer__legal a {
-  width: auto;
-  min-width: 0;
-  flex: 1 1 120px;
 }
 
 .footer {
@@ -105,32 +78,4 @@ body {
 
 .days {
   padding-bottom: calc(var(--dock-safe) + 24px);
-}
-
-/* Opening photos — center and fill sticky frame on narrow viewports */
-@media (max-width: 420px) {
-  .opening__bg-media,
-  .opening__bg-stack {
-    left: 50% !important;
-    right: auto !important;
-    width: 130% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    transform: translateX(-50%) !important;
-    height: 100% !important;
-    top: 0;
-    object-fit: cover;
-  }
-
-  .opening__bg-stack img {
-    object-fit: cover;
-  }
-}
-
-.cta-final__bg {
-  left: 50%;
-  right: auto;
-  width: 200%;
-  max-width: none;
-  margin-left: -100%;
 }
