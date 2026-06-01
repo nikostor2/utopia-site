@@ -732,15 +732,16 @@
   color: #161514;
 }
 
-/* Figma 614:2836 — 412px stage from content left, bleeds past frame right */
+/* Figma 614:2836 — fixed 412×294 stage, left-aligned with copy, bleeds right */
 .days__carousel {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 16px;
-  width: min(412px, calc(100% + var(--pad-right)));
-  margin-right: calc(-1 * var(--pad-right));
+  width: 412px;
+  max-width: none;
+  margin-right: min(0px, calc(100% - 412px));
   align-self: flex-start;
 }
 

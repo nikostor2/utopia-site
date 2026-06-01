@@ -117,10 +117,3 @@ body {
 .days {
   padding-bottom: calc(var(--dock-safe) + 24px);
 }
-
-@media (max-width: 520px) {
-  .days__carousel {
-    width: min(412px, calc(var(--app-width) - var(--pad-left)));
-    margin-right: calc(-1 * var(--pad-right));
-  }
-}
