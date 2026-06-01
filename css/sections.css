@@ -747,7 +747,6 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  max-width: var(--content-width);
 }
 
 .days__title {
@@ -774,10 +773,8 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  width: var(--days-stage-max);
-  max-width: 100%;
-  margin-inline: auto;
-  align-self: center;
+  width: 100%;
+  align-self: stretch;
 }
 
 /* Viewport up to 412×274; positions scaled in experiences.js */
@@ -921,6 +918,7 @@
   width: 63px;
   height: 4px;
   padding: 0;
+  align-self: flex-start;
 }
 
 .days__progress-item {

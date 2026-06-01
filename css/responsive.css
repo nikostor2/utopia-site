@@ -14,7 +14,7 @@ body {
 @media (max-width: 520px) {
   :root {
     --max-width: 100%;
-    --space-page: max(20px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    --space-page: max(32px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
 
   .hero {
@@ -76,21 +76,4 @@ body {
 
 .days {
   padding-bottom: calc(var(--dock-safe) + 24px);
-}
-
-@media (max-width: 520px) {
-  .days {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .days__intro {
-    padding-inline: var(--space-page);
-    max-width: none;
-  }
-
-  .days__carousel {
-    width: min(412px, var(--app-width));
-    align-self: center;
-  }
 }

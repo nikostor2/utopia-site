@@ -17,7 +17,6 @@ export function initExperiences() {
   const DESIGN_CARD_H = 274;
   const SCALE_INACTIVE = 163.2 / 205;
   const OFFSET_Y_INACTIVE = 27.4;
-  const MOBILE_CARD_BOOST = 1.18;
   const PEEK_LEFT = -107.2;
   const SWIPE_THRESHOLD = 40;
   const count = slides.length;
@@ -52,12 +51,6 @@ export function initExperiences() {
     return w / DESIGN_LAYOUT_W;
   }
 
-  function cardScale() {
-    const base = layoutScale();
-    if (window.innerWidth > 520) return base;
-    return base * MOBILE_CARD_BOOST;
-  }
-
   function styleCard(card, isActive, scale) {
     const offsetY = OFFSET_Y_INACTIVE * scale;
     card.style.transform = isActive
@@ -78,19 +71,18 @@ export function initExperiences() {
   }
 
   function layoutCards() {
-    const posScale = layoutScale();
-    const sizeScale = cardScale();
-    const cardW = DESIGN_CARD_W * sizeScale;
+    const scale = layoutScale();
+    const cardW = DESIGN_CARD_W * scale;
     const layout = LAYOUTS[active];
 
-    syncCarouselHeight(sizeScale);
+    syncCarouselHeight(scale);
 
     slides.forEach((card, i) => {
       const slot = layout[i];
       card.style.width = `${cardW}px`;
-      card.style.height = `${DESIGN_CARD_H * sizeScale}px`;
-      card.style.left = `${slot.x * posScale}px`;
-      styleCard(card, slot.active, sizeScale);
+      card.style.height = `${DESIGN_CARD_H * scale}px`;
+      card.style.left = `${slot.x * scale}px`;
+      styleCard(card, slot.active, scale);
       card.classList.remove("is-prev", "is-next");
 
       const rel = (i - active + count) % count;
