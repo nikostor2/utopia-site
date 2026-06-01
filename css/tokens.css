@@ -21,9 +21,11 @@
   --radius-dock: 16px;
   --radius-pill: 160px;
 
-  --space-page: 32px;
+  --space-page: clamp(16px, 8.47vw, 32px);
   --space-gutter: 10px;
   --max-width: 378px;
+  --content-width: min(314px, calc(100vw - var(--space-page) * 2));
+  --days-stage-max: 412px;
 
   --dock-height: 40px;
   --dock-offset: 10px;

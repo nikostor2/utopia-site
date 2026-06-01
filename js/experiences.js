@@ -2,6 +2,7 @@ export function initExperiences() {
   const stage = document.querySelector(".days__stage");
   const track = document.querySelector(".days__track");
   const progress = document.querySelector(".days__progress");
+  const carousel = document.querySelector(".days__carousel");
   if (!stage || !track || !progress) return;
 
   const slides = [...track.querySelectorAll(".days__card")];
@@ -11,6 +12,9 @@ export function initExperiences() {
 
   if (slides.length === 0) return;
 
+  const DESIGN_STAGE_W = 412;
+  const DESIGN_CARD_W = 205;
+  const DESIGN_CARD_H = 274;
   const SCALE_INACTIVE = 163.2 / 205;
   const OFFSET_Y_INACTIVE = 27.4;
   const PEEK_LEFT = -107.2;
@@ -42,10 +46,16 @@ export function initExperiences() {
   let moved = false;
   let suppressHitClick = false;
 
-  function styleCard(card, isActive) {
+  function layoutScale() {
+    const w = stage.clientWidth || DESIGN_STAGE_W;
+    return Math.min(1, w / DESIGN_STAGE_W);
+  }
+
+  function styleCard(card, isActive, scale) {
+    const offsetY = OFFSET_Y_INACTIVE * scale;
     card.style.transform = isActive
       ? "translate3d(0, 0, 0) scale(1)"
-      : `translate3d(0, ${OFFSET_Y_INACTIVE}px, 0) scale(${SCALE_INACTIVE})`;
+      : `translate3d(0, ${offsetY}px, 0) scale(${SCALE_INACTIVE})`;
     card.classList.toggle("is-active", isActive);
   }
 
@@ -53,13 +63,30 @@ export function initExperiences() {
     track.style.transform = dragX ? `translate3d(${dragX}px, 0, 0)` : "translate3d(0, 0, 0)";
   }
 
+  function syncCarouselHeight(scale) {
+    const h = DESIGN_CARD_H * scale;
+    stage.style.height = `${h}px`;
+    track.style.height = `${h}px`;
+    if (carousel) {
+      const progressTop = h + 16;
+      progress.style.top = `${progressTop}px`;
+      carousel.style.minHeight = `${progressTop + 24}px`;
+    }
+  }
+
   function layoutCards() {
+    const scale = layoutScale();
+    const cardW = DESIGN_CARD_W * scale;
     const layout = LAYOUTS[active];
+
+    syncCarouselHeight(scale);
 
     slides.forEach((card, i) => {
       const slot = layout[i];
-      card.style.left = `${slot.x}px`;
-      styleCard(card, slot.active);
+      card.style.width = `${cardW}px`;
+      card.style.height = `${DESIGN_CARD_H * scale}px`;
+      card.style.left = `${slot.x * scale}px`;
+      styleCard(card, slot.active, scale);
       card.classList.remove("is-prev", "is-next");
 
       const rel = (i - active + count) % count;
@@ -151,6 +178,8 @@ export function initExperiences() {
   stage.addEventListener("pointercancel", (e) => {
     endDrag(e.pointerId);
   });
+
+  window.addEventListener("resize", () => layoutCards(), { passive: true });
 
   goTo(0);
 }
