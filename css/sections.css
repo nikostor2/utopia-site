@@ -698,7 +698,7 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding-block: 48px 64px;
-  padding-inline: var(--pad-left) var(--pad-right);
+  padding-inline: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -712,6 +712,16 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  padding-inline: var(--pad-left) var(--pad-right);
+  box-sizing: border-box;
+}
+
+/* Figma frame edge — clip 412px stage at x=32 (visible width = frame − 32) */
+.days__viewport {
+  overflow: hidden;
+  width: 100%;
+  padding-left: var(--pad-left);
+  box-sizing: border-box;
 }
 
 .days__title {
@@ -732,7 +742,7 @@
   color: #161514;
 }
 
-/* Figma 614:2836 — fixed 412×294 stage, left-aligned with copy, bleeds right */
+/* Figma 614:2836 — 412px stage extends past frame; .days__viewport clips at 378 */
 .days__carousel {
   position: relative;
   display: flex;
@@ -741,8 +751,6 @@
   gap: 16px;
   width: 412px;
   max-width: none;
-  margin-right: min(0px, calc(100% - 412px));
-  align-self: flex-start;
 }
 
 /* Viewport up to 412×274; positions scaled in experiences.js */

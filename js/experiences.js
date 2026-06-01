@@ -185,7 +185,6 @@ export function initExperiences() {
   if (typeof ResizeObserver !== "undefined") {
     const ro = new ResizeObserver(() => layoutCards());
     ro.observe(stage);
-    if (stage.parentElement) ro.observe(stage.parentElement);
   }
 
   goTo(0);
