@@ -39,24 +39,35 @@ export function initOpening() {
   });
 
   const slides = [...section.querySelectorAll(".opening__bg-slide")];
+  const HOLD_PORTION = 0.6;
 
   function update(scrollProgress) {
     const slideCount = slides.length;
-    const scaled = scrollProgress * slideCount;
+    if (slideCount === 0) return;
+
+    const transitions = Math.max(1, slideCount - 1);
+    const scaled = scrollProgress * transitions;
     const index = Math.min(slideCount - 1, Math.floor(scaled));
     const local = scaled - index;
 
-    slides.forEach((s, i) => {
-      if (i === index) {
-        s.classList.add("is-active");
-        s.style.opacity = String(1 - local * 0.35);
-      } else if (i === index + 1) {
-        s.classList.add("is-active");
-        s.style.opacity = String(local * 0.85);
-      } else {
-        s.classList.remove("is-active");
-        s.style.opacity = "";
+    const nextIndex = Math.min(index + 1, slideCount - 1);
+    let currentOpacity = 1;
+    let nextOpacity = 0;
+
+    if (index < slideCount - 1) {
+      if (local > HOLD_PORTION) {
+        const fadeProgress = Math.min(1, (local - HOLD_PORTION) / (1 - HOLD_PORTION));
+        currentOpacity = 1 - fadeProgress;
+        nextOpacity = fadeProgress;
       }
+    }
+
+    slides.forEach((s, i) => {
+      const opacity = i === index ? currentOpacity : i === nextIndex ? nextOpacity : 0;
+      s.style.opacity = String(opacity);
+
+      if (opacity > 0) s.classList.add("is-active");
+      else s.classList.remove("is-active");
     });
 
     if (label) label.textContent = OPENING_SLIDES[index].label;

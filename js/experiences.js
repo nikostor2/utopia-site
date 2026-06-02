@@ -71,6 +71,24 @@ export function initExperiences() {
     track.style.transform = dragX ? `translate3d(${dragX}px, 0, 0)` : "translate3d(0, 0, 0)";
   }
 
+  function applyDragOpacity() {
+    slides.forEach((card) => {
+      card.style.opacity = "";
+    });
+
+    if (!dragging || dragX === 0) return;
+
+    const progress = Math.min(Math.abs(dragX) / 140, 1);
+    const leavingIndex = active;
+    const enteringIndex = dragX < 0 ? (active + 1) % count : (active - 1 + count) % count;
+
+    const leavingOpacity = 1 - progress * 0.45;
+    const enteringOpacity = 0.65 + progress * 0.35;
+
+    slides[leavingIndex].style.opacity = String(leavingOpacity);
+    slides[enteringIndex].style.opacity = String(enteringOpacity);
+  }
+
   function syncLayoutMetrics(scale) {
     const h = DESIGN_ACTIVE_H * scale;
     stage.style.height = `${h}px`;
@@ -96,6 +114,7 @@ export function initExperiences() {
     });
 
     applyDragOffset();
+    applyDragOpacity();
   }
 
   function goTo(index) {
@@ -169,6 +188,7 @@ export function initExperiences() {
     if (Math.abs(dx) > 6) moved = true;
     dragX = dx;
     applyDragOffset();
+    applyDragOpacity();
   });
 
   stage.addEventListener("pointerup", (e) => {
