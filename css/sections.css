@@ -11,7 +11,8 @@
   height: 794px;
   margin: 0 auto;
   overflow: hidden;
-  overscroll-behavior: none;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
   color: var(--color-white);
 }
 
@@ -101,8 +102,10 @@
   scroll-behavior: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-  overscroll-behavior: contain;
+  /* Vertical page scroll first; horizontal swipe still scrolls this track. */
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
   cursor: grab;
   user-select: none;
 }
@@ -296,19 +299,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-}
-
-.ecosystem--coming-soon .ecosystem__nav-btn {
-  display: none;
-}
-
-.ecosystem--coming-soon .ecosystem__location-pill {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: calc(100% - 64px);
-  padding: 11px 24px;
 }
 
 .ecosystem__location-pill--static {

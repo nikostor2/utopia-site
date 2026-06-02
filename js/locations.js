@@ -56,8 +56,6 @@ export function initLocations() {
     const comingSoon = list.length === 0;
 
     section.classList.toggle("ecosystem--coming-soon", comingSoon);
-    prev?.toggleAttribute("hidden", comingSoon);
-    next?.toggleAttribute("hidden", comingSoon);
 
     if (comingSoon) {
       const empty = "Coming soon";
