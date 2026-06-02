@@ -1,8 +1,8 @@
 /* —— Hero (Figma 711:1216 — 378×794) —— */
 .hero {
-  --hero-content-top: 150px;
+  --hero-content-top: 160px;
   --hero-content-bottom: 62px;
-  --hero-title-cards-gap: 56px;
+  --hero-title-cards-gap: 36px;
 
   position: relative;
   z-index: 1;
@@ -775,18 +775,6 @@
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
-}
-
-.days__stage::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 28px;
-  height: 100%;
-  z-index: 9;
-  pointer-events: none;
-  background: linear-gradient(90deg, #f9f5ea 0%, rgba(249, 245, 234, 0) 100%);
 }
 
 .days__stage.is-dragging {

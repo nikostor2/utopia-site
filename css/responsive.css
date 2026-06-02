@@ -19,7 +19,7 @@ body {
   }
 
   .hero {
-    --hero-content-top: max(144px, calc(env(safe-area-inset-top, 0px) + 132px));
+    --hero-content-top: max(154px, calc(env(safe-area-inset-top, 0px) + 142px));
     --hero-content-bottom: calc(var(--dock-safe) - 8px);
 
     width: var(--app-width);
@@ -55,17 +55,21 @@ body {
 
   .hero__cards-wrap {
     margin-top: var(--hero-title-cards-gap);
-    max-height: none;
+    height: 420px;
+    max-height: 420px;
   }
 
   .hero__cards {
-    min-height: 0;
+    height: 420px;
+    min-height: 420px;
   }
 
-  .location-card {
-    height: 100%;
-    max-height: none;
-    min-height: 240px;
+  .hero .location-card {
+    flex: 0 0 314px;
+    width: 314px;
+    height: 420px;
+    min-height: 420px;
+    max-height: 420px;
   }
 
   .opening__sticky {
@@ -89,7 +93,7 @@ body {
 
 .opening__bg-media,
 .opening__bg-stack {
-  left: 50% !important;
+  left: 52% !important;
   right: auto !important;
   width: 112% !important;
   max-width: none !important;

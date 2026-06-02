@@ -74,10 +74,7 @@ export function initExperiences() {
       : `translate3d(0, ${DESIGN_INACTIVE_Y * scale}px, 0)`;
     card.classList.toggle("is-active", isActive);
 
-    const isEdgeClipped = !isActive && (slot.x < 0 || slot.x + DESIGN_INACTIVE_W > DESIGN_STAGE_W);
-    const baseOpacity = isActive ? 1 : isEdgeClipped ? 0.58 : 0.82;
-    card.dataset.baseOpacity = String(baseOpacity);
-    card.style.opacity = String(baseOpacity);
+    card.style.opacity = "1";
 
     prevLeftByCard.set(card, left);
   }
@@ -88,21 +85,16 @@ export function initExperiences() {
 
   function applyDragOpacity() {
     slides.forEach((card) => {
-      card.style.opacity = card.dataset.baseOpacity || "1";
+      card.style.opacity = "1";
     });
 
     if (!dragging || dragX === 0) return;
 
     const progress = Math.min(Math.abs(dragX) / 140, 1);
     const leavingIndex = active;
-    const enteringIndex = dragX < 0 ? (active + 1) % count : (active - 1 + count) % count;
-
     const leavingOpacity = Math.max(0.35, 1 - progress * 0.65);
-    const enteringBase = Number(slides[enteringIndex].dataset.baseOpacity || "0.82");
-    const enteringOpacity = Math.min(1, enteringBase + progress * (1 - enteringBase));
 
     slides[leavingIndex].style.opacity = String(leavingOpacity);
-    slides[enteringIndex].style.opacity = String(enteringOpacity);
   }
 
   function syncLayoutMetrics(scale) {
