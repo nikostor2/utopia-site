@@ -39,7 +39,7 @@ body {
   }
 
   .hero__content {
-    top: max(108px, calc(env(safe-area-inset-top, 0px) + 96px));
+    top: max(142px, calc(env(safe-area-inset-top, 0px) + 130px));
     bottom: calc(var(--dock-safe) + 12px);
     gap: 12px;
   }
