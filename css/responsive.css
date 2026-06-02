@@ -20,7 +20,7 @@ body {
 
   .hero {
     --hero-content-top: max(144px, calc(env(safe-area-inset-top, 0px) + 132px));
-    --hero-content-bottom: calc(var(--dock-safe) + 12px);
+    --hero-content-bottom: calc(var(--dock-safe) - 8px);
 
     width: var(--app-width);
     max-width: none;
@@ -43,7 +43,7 @@ body {
   }
 
   .hero__content {
-    gap: 12px;
+    gap: 56px;
   }
 
   .heading-hero {
@@ -63,7 +63,7 @@ body {
 
   .location-card {
     height: 100%;
-    max-height: 400px;
+    max-height: none;
     min-height: 240px;
   }
 
