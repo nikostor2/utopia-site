@@ -2,7 +2,7 @@ export const HERO_LOCATIONS = [
   {
     id: "jericoacoara",
     label: "Jericoacoara, Brazil",
-    bg: "assets/hero-bg-jericoacoara.png?v=20260602-1251",
+    bg: "assets/hero-bg-jericoacoara-suite.png?v=20260602-1724",
     href: "#destinations",
   },
   {
@@ -15,6 +15,12 @@ export const HERO_LOCATIONS = [
     id: "cabarete",
     label: "Cabarete, Dominican Republic",
     bg: "assets/hero-bg-cabarete.png?v=20260602-1410",
+    href: "#destinations",
+  },
+  {
+    id: "barcelona",
+    label: "Barcelona, Spain",
+    bg: "assets/hero-bg-barcelona-urban.png?v=20260602-1733",
     href: "#destinations",
   },
   {
@@ -33,18 +39,48 @@ export const HERO_LOCATIONS = [
 
 export const LOCATION_GROUPS = {
   tropical: [
-    { name: "Jericoacoara", country: "Brazil", image: "assets/ecosystem-bg-1.jpg" },
+    {
+      name: "Jericoacoara",
+      country: "Brazil",
+      image: "assets/ecosystem-bg-jeri-lobby.png?v=20260602-1724",
+    },
     { name: "Flora", country: "Costa Rica", image: "assets/ecosystem-bg-2.jpg" },
     { name: "Prea", country: "Brazil", image: "assets/hero-bg-jericoacoara.png?v=20260602-1251" },
-    { name: "Roca", country: "Costa Rica", image: "assets/hero-bg-roca.png?v=20260602-1243" },
-    { name: "Cabarete", country: "Dominican Republic", image: "assets/opening-kite.jpg" },
+    {
+      name: "Roca",
+      country: "Costa Rica",
+      image: "assets/ecosystem-bg-roca-tropical.png?v=20260602-1741",
+    },
+    {
+      name: "Cabarete",
+      country: "Dominican Republic",
+      image: "assets/ecosystem-bg-cabarete-tropical.png?v=20260602-1744",
+    },
   ],
   urban: [
-    { name: "Dubai", country: "UAE", image: "assets/experience-dining.jpg" },
-    { name: "Barcelona", country: "Spain", image: "assets/experience-wellness.jpg" },
-    { name: "Cape Town", country: "South Africa", image: "assets/hero-bg-cape-town.jpg" },
+    {
+      name: "Dubai",
+      country: "UAE",
+      image: "assets/ecosystem-bg-dubai-urban.png?v=20260602-1738",
+    },
+    {
+      name: "Barcelona",
+      country: "Spain",
+      image: "assets/ecosystem-bg-barcelona-urban.png?v=20260602-1733",
+    },
+    {
+      name: "Cape Town",
+      country: "South Africa",
+      image: "assets/ecosystem-bg-capetown-urban.png?v=20260602-1736",
+    },
   ],
-  alpine: [],
+  alpine: [
+    {
+      name: "St. Moritz",
+      country: "Switzerland",
+      image: "assets/ecosystem-bg-alpine.png?v=20260602-1746",
+    },
+  ],
 };
 
 export const OPENING_SLIDES = [
