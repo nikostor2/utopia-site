@@ -40,6 +40,7 @@ export function initOpening() {
 
   const slides = [...section.querySelectorAll(".opening__bg-slide")];
   const HOLD_PORTION = 0.6;
+  const FINAL_TRANSITION_HOLD = 0.2;
 
   function update(scrollProgress) {
     const slideCount = slides.length;
@@ -55,8 +56,10 @@ export function initOpening() {
     let nextOpacity = 0;
 
     if (index < slideCount - 1) {
-      if (local > HOLD_PORTION) {
-        const fadeProgress = Math.min(1, (local - HOLD_PORTION) / (1 - HOLD_PORTION));
+      // Let the final "Wellness" slide appear earlier and stay visible longer.
+      const holdPortion = index === slideCount - 2 ? FINAL_TRANSITION_HOLD : HOLD_PORTION;
+      if (local > holdPortion) {
+        const fadeProgress = Math.min(1, (local - holdPortion) / (1 - holdPortion));
         currentOpacity = 1 - fadeProgress;
         nextOpacity = fadeProgress;
       }

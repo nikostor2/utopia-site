@@ -966,14 +966,14 @@
 .cta-final__bg img {
   display: block;
   position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 205%;
-  height: auto;
-  min-height: 115%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   max-width: none;
-  transform: translate(-50%, -50%);
+  transform: none;
   object-fit: cover;
+  object-position: center 82%;
 }
 
 .cta-final__content {
