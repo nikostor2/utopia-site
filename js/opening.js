@@ -13,7 +13,36 @@ export function initOpening() {
     const el = document.createElement("div");
     el.className = `opening__bg-slide opening__bg-slide--${i}` + (i === 0 ? " is-active" : "");
 
-    if (slide.stacked && slide.layers) {
+    if (slide.video) {
+      const video = document.createElement("video");
+      video.className = "opening__bg-media";
+      video.src = slide.video;
+      video.poster = slide.image || "";
+      video.muted = true;
+      video.loop = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.preload = "metadata";
+      video.style.width = `${slide.mediaWidth}px`;
+      video.style.left = slide.mediaLeft;
+
+      // Keep section resilient: if video fails, render static image.
+      video.addEventListener(
+        "error",
+        () => {
+          const img = document.createElement("img");
+          img.className = "opening__bg-media";
+          img.src = slide.image;
+          img.alt = "";
+          img.style.width = `${slide.mediaWidth}px`;
+          img.style.left = slide.mediaLeft;
+          video.replaceWith(img);
+        },
+        { once: true }
+      );
+
+      el.appendChild(video);
+    } else if (slide.stacked && slide.layers) {
       const stack = document.createElement("div");
       stack.className = "opening__bg-stack";
       stack.style.left = slide.mediaLeft;
