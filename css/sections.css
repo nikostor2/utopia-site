@@ -1,6 +1,6 @@
 /* —— Hero (Figma 711:1216 — 378×794) —— */
 .hero {
-  --hero-content-top: 148px;
+  --hero-content-top: 162px;
   --hero-content-bottom: 62px;
 
   position: relative;
@@ -142,7 +142,7 @@
   flex: 0 0 auto;
   box-sizing: border-box;
   width: 100%;
-  padding: var(--space-section-top-md) var(--pad-right) 0 var(--pad-left);
+  padding: var(--space-section-top-lg) var(--pad-right) 0 var(--pad-left);
   background: #f9f5ea;
   display: flex;
   flex-direction: column;
