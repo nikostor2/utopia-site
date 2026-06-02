@@ -17,7 +17,7 @@ export function initExperiences() {
   const DESIGN_ACTIVE_H = 274;
   const DESIGN_INACTIVE_W = 163.2;
   const DESIGN_INACTIVE_H = 219.2;
-  const DESIGN_INACTIVE_Y = 27.4;
+  const DESIGN_INACTIVE_Y = 0;
   const DESIGN_PROGRESS_X = 65;
   const PEEK_LEFT = -107.2;
   const SWIPE_THRESHOLD = 40;
