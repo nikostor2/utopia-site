@@ -41,6 +41,7 @@ export function initCarousel(track, options = {}) {
   let startScroll = 0;
   let moved = false;
   let jumping = false;
+  let touchSnapTimer = null;
 
   track.classList.add("carousel-track");
 
@@ -185,6 +186,14 @@ export function initCarousel(track, options = {}) {
     setActive(readActiveIndex(), { smooth, emit: true });
   }
 
+  function scheduleTouchSnap(delay = 180) {
+    clearTimeout(touchSnapTimer);
+    touchSnapTimer = setTimeout(() => {
+      if (dragging || jumping) return;
+      if (!jumpIfOnClone()) snapNearest(true);
+    }, delay);
+  }
+
   let scrollIdleTimer;
 
   track.addEventListener(
@@ -196,7 +205,7 @@ export function initCarousel(track, options = {}) {
         clearTimeout(scrollIdleTimer);
         scrollIdleTimer = setTimeout(() => {
           if (!jumpIfOnClone()) snapNearest(true);
-        }, 120);
+        }, 180);
       }
     },
     { passive: true }
@@ -213,8 +222,31 @@ export function initCarousel(track, options = {}) {
     );
   }
 
-  track.addEventListener("touchstart", () => pauseAutoplay(), { passive: true });
-  track.addEventListener("touchend", () => scheduleAutoplay(), { passive: true });
+  track.addEventListener(
+    "touchstart",
+    () => {
+      clearTimeout(touchSnapTimer);
+      pauseAutoplay();
+    },
+    { passive: true }
+  );
+  track.addEventListener(
+    "touchend",
+    () => {
+      scheduleAutoplay();
+      // iOS may stop between snap points; enforce a final snap.
+      scheduleTouchSnap(180);
+    },
+    { passive: true }
+  );
+  track.addEventListener(
+    "touchcancel",
+    () => {
+      scheduleAutoplay();
+      scheduleTouchSnap(120);
+    },
+    { passive: true }
+  );
 
   track.addEventListener("pointerdown", (e) => {
     if (e.button !== 0 || e.pointerType === "touch") return;
