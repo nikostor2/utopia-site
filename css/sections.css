@@ -68,6 +68,7 @@
   top: 0;
   bottom: 0;
   width: 100%;
+  min-width: 0;
   padding-top: var(--hero-content-top);
   padding-bottom: var(--hero-content-bottom);
   box-sizing: border-box;
@@ -81,6 +82,7 @@
 
 .hero__cards-wrap {
   width: 100%;
+  min-width: 0;
   margin-top: var(--hero-title-cards-gap);
   flex: 1 1 auto;
   min-height: 0;
@@ -92,17 +94,19 @@
 .hero__cards {
   display: flex;
   gap: 22px;
+  width: 100%;
+  min-width: 0;
   height: 100%;
   min-height: 280px;
   padding: 0 var(--pad-right) 0 var(--pad-left);
   scroll-padding: 0 var(--pad-right) 0 var(--pad-left);
-  overflow-x: auto;
-  overflow-y: clip;
+  overflow-x: scroll;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pinch-zoom;
+  touch-action: pan-x;
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;
   cursor: grab;
