@@ -443,76 +443,21 @@
   white-space: nowrap;
 }
 
-.opening__footer {
-  position: absolute;
-  z-index: 2;
-  left: var(--pad-left);
-  right: var(--pad-right);
-  bottom: 31.5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-sm);
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.opening__footer .ecosystem__location-pill {
-  position: static;
-  left: auto;
-  right: auto;
+/* Opening nav — same placement pattern as ecosystem__media */
+.opening__media .ecosystem__nav-btn {
+  z-index: 3;
   top: auto;
-  width: max-content;
-  max-width: min(100%, 318px);
-  flex-shrink: 0;
-  pointer-events: auto;
+  bottom: 31.5px;
 }
 
-/* Same pattern as .days__progress — white on photo (Figma 693:2988) */
-.opening__progress {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xxs);
-  width: 63px;
-  height: 4px;
-  padding: 0;
-  flex-shrink: 0;
+.opening__media .ecosystem__nav-btn--prev {
+  left: var(--pad-left);
+  right: auto;
 }
 
-.opening__progress-item {
-  flex-shrink: 0;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  border: none;
-  padding: 0;
-  cursor: default;
-  appearance: none;
-  pointer-events: none;
-}
-
-.opening__progress[data-active="0"] .opening__progress-item:nth-child(1) {
-  width: 39px;
-  height: 4px;
-  border-radius: 2px;
-  background: #ffffff;
-}
-
-.opening__progress[data-active="1"] .opening__progress-item:nth-child(2) {
-  width: 39px;
-  height: 4px;
-  border-radius: 2px;
-  background: #ffffff;
-}
-
-.opening__progress[data-active="2"] .opening__progress-item:nth-child(3) {
-  width: 39px;
-  height: 4px;
-  border-radius: 2px;
-  background: #ffffff;
+.opening__media .ecosystem__nav-btn--next {
+  right: var(--pad-right);
+  left: auto;
 }
 
 /* —— Beyond villas (Figma 614:2783 — 378×861) —— */
