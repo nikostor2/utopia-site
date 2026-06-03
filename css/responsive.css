@@ -30,11 +30,6 @@ body {
     max-height: 100dvh;
   }
 
-  .hero__bg-layer {
-    left: -12%;
-    width: 124%;
-  }
-
   .hero__fade {
     top: auto;
     bottom: 0;
@@ -61,18 +56,24 @@ body {
     overflow: visible;
   }
 
-  .hero__cards {
+  .hero__cards-swiper {
     height: 420px;
     min-height: 420px;
-    overflow-y: visible;
   }
 
-  .hero .location-card {
-    flex: 0 0 314px;
+  .hero__cards-swiper .swiper-slide {
     width: 314px;
+  }
+
+  .hero__cards-swiper .location-card {
     height: 420px;
     min-height: 420px;
     max-height: 420px;
+  }
+
+  .hero__bg-swiper .hero__bg-layer {
+    left: -12%;
+    width: 124%;
   }
 
   .opening__sticky {

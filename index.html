@@ -15,12 +15,20 @@
     <link rel="stylesheet" href="css/menu.css?v=20260602-1430" />
     <link rel="stylesheet" href="css/parallax.css?v=20260602-1430" />
     <link rel="stylesheet" href="css/responsive.css?v=20260602-2025" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/hero-swiper.css?v=20260603-1600" />
   </head>
   <body>
     <div class="page">
       <!-- Screen 1: Hero (378×794) -->
       <section class="hero" id="top" aria-label="Hero">
-        <div class="hero__bg" aria-hidden="true"></div>
+        <div class="hero__bg swiper hero__bg-swiper" aria-hidden="true">
+          <div class="swiper-wrapper"></div>
+        </div>
 
         <a class="logo hero__logo" href="#top" aria-label="Utopia home">
           <img class="logo__full" src="assets/LOGO.svg" alt="Utopia" width="100" height="114" />
@@ -29,8 +37,8 @@
         <div class="hero__content">
           <h1 class="heading-hero">Ecosystem of Retreats</h1>
           <div class="hero__cards-wrap">
-            <div class="hero__cards" aria-label="Destinations">
-              <div class="hero__cards-track" role="list"></div>
+            <div class="swiper hero__cards-swiper" aria-label="Destinations">
+              <div class="swiper-wrapper" role="list"></div>
             </div>
           </div>
         </div>
@@ -313,6 +321,6 @@
       </button>
     </nav>
 
-    <script type="module" src="js/main.js?v=20260603-1405"></script>
+    <script type="module" src="js/main.js?v=20260603-1600"></script>
   </body>
 </html>
