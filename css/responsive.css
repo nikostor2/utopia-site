@@ -107,8 +107,9 @@ body {
   flex-wrap: wrap;
 }
 
+/* 48px under legal; body already has padding-bottom: var(--dock-safe) for the dock */
 .footer {
-  padding-bottom: calc(var(--dock-safe) + 48px);
+  padding-bottom: 48px;
 }
 
 .days {
