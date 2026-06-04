@@ -65,7 +65,7 @@ export const LOCATION_GROUPS = {
     {
       name: "Dubai",
       country: "UAE",
-      image: "assets/ecosystem-bg-dubai-urban.png?v=20260602-1738",
+      image: "assets/enhanced_ecosystem-bg-dubai-urban.png?v=20260604-1750",
     },
     {
       name: "Barcelona",
