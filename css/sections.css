@@ -553,6 +553,11 @@ video.opening__bg-media {
   object-position: center;
 }
 
+.beyond__video {
+  pointer-events: none;
+  background: #000;
+}
+
 .beyond__meta {
   display: flex;
   flex-direction: column;

@@ -16,7 +16,8 @@
     flex-shrink: 0;
   }
 
-  .parallax-media .beyond__image {
+  .parallax-media .beyond__image,
+  .parallax-media .beyond__video {
     display: block;
     width: 100%;
     height: 112%;
