@@ -2,7 +2,7 @@ export const HERO_LOCATIONS = [
   {
     id: "jericoacoara",
     label: "Jericoacoara, Brazil",
-    bg: "assets/hero-bg-jericoacoara-suite.png?v=20260602-1724",
+    bg: "assets/enhanced_hero-bg-jericoacoara-suite.png?v=20260604-1752",
     href: "#destinations",
   },
   {
