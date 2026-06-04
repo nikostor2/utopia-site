@@ -1,18 +1,31 @@
 const ECOSYSTEM_GRADIENT =
   "linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%)";
 
+export const MEDIA_VERSION = "20260604-1945";
+
 const loaded = new Map();
 
 function cacheKey(url) {
   return url;
 }
 
+/** Mobile delivery — 840px JPEG in assets/opt/ (see scripts/optimize-media.sh). */
+export function resolveImageUrl(url) {
+  if (!url) return url;
+  const [path, query] = url.split("?");
+  const match = path.match(/^assets\/(.+)\.(png|jpe?g)$/i);
+  if (!match) return url;
+  const v = query?.includes("v=") ? query : `v=${MEDIA_VERSION}`;
+  return `assets/opt/${match[1]}.jpg?${v}`;
+}
+
 /** Decode image off the critical path, then apply as CSS background. */
 export function loadBackgroundImage(el, url, gradient = ECOSYSTEM_GRADIENT) {
   if (!el || !url) return Promise.resolve();
 
-  const key = cacheKey(url);
-  if (loaded.get(key) === "done" && el.dataset.loadedUrl === url) {
+  const deliveryUrl = resolveImageUrl(url);
+  const key = cacheKey(deliveryUrl);
+  if (loaded.get(key) === "done" && el.dataset.loadedUrl === deliveryUrl) {
     return Promise.resolve();
   }
 
@@ -25,8 +38,8 @@ export function loadBackgroundImage(el, url, gradient = ECOSYSTEM_GRADIENT) {
     img.decoding = "async";
 
     img.onload = () => {
-      el.style.backgroundImage = gradient ? `${gradient}, url("${url}")` : `url("${url}")`;
-      el.dataset.loadedUrl = url;
+      el.style.backgroundImage = gradient ? `${gradient}, url("${deliveryUrl}")` : `url("${deliveryUrl}")`;
+      el.dataset.loadedUrl = deliveryUrl;
       el.classList.remove("is-loading");
       el.classList.add("is-ready");
       loaded.set(key, "done");
@@ -34,13 +47,19 @@ export function loadBackgroundImage(el, url, gradient = ECOSYSTEM_GRADIENT) {
     };
 
     img.onerror = () => {
+      if (deliveryUrl !== url) {
+        loaded.delete(key);
+        loaded.delete(`${key}:promise`);
+        loadBackgroundImage(el, url, gradient).then(resolve);
+        return;
+      }
       el.classList.remove("is-loading");
       loaded.set(key, "error");
       resolve();
     };
 
     el.classList.add("is-loading");
-    img.src = url;
+    img.src = deliveryUrl;
   });
 
   loaded.set(key, "pending");
@@ -48,21 +67,83 @@ export function loadBackgroundImage(el, url, gradient = ECOSYSTEM_GRADIENT) {
   return promise;
 }
 
-/** Warm cache without touching DOM (hero neighbors, next location). */
 export function prefetchImage(url) {
   if (!url) return;
-  const key = cacheKey(url);
+  const deliveryUrl = resolveImageUrl(url);
+  const key = cacheKey(deliveryUrl);
   if (loaded.has(key)) return;
   loaded.set(key, "prefetch");
   const img = new Image();
   img.decoding = "async";
   img.onload = () => loaded.set(key, "done");
   img.onerror = () => loaded.delete(key);
-  img.src = url;
+  img.src = deliveryUrl;
 }
 
 export function prefetchImages(urls) {
   urls.forEach(prefetchImage);
+}
+
+export function resolveVideoUrl(url) {
+  if (!url) return url;
+  const [path, query] = url.split("?");
+  const match = path.match(/^assets\/(.+)\.mp4$/i);
+  if (!match) return url;
+  const v = query?.includes("v=") ? query : `v=${MEDIA_VERSION}`;
+  return `assets/opt/${match[1]}.mp4?${v}`;
+}
+
+export function ensureVideoSource(video, url) {
+  if (!video || !url) return;
+  const deliveryUrl = resolveVideoUrl(url);
+  if (video.dataset.loadedUrl === deliveryUrl) return;
+
+  video.src = deliveryUrl;
+  video.dataset.loadedUrl = deliveryUrl;
+  video.load();
+}
+
+export function clearVideoSource(video) {
+  if (!video) return;
+  video.pause();
+  video.removeAttribute("src");
+  delete video.dataset.loadedUrl;
+  video.load();
+}
+
+/** Load video when near viewport; optional play when visible. */
+export function attachLazyVideo(video, { rootMargin = "160px", threshold = 0.15, autoplay = true } = {}) {
+  const rawSrc = video.dataset.src;
+  if (!rawSrc) return;
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "true");
+  video.preload = "none";
+
+  const play = () => {
+    ensureVideoSource(video, rawSrc);
+    if (!autoplay) return;
+    const p = video.play();
+    if (p?.catch) p.catch(() => {});
+  };
+
+  const pause = () => {
+    if (!video.paused) video.pause();
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) play();
+        else pause();
+      });
+    },
+    { threshold, rootMargin }
+  );
+
+  observer.observe(video);
 }
 
 export { ECOSYSTEM_GRADIENT };

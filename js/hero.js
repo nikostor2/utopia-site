@@ -80,7 +80,8 @@ export function initHero(parallax) {
     const layer = document.createElement("div");
     layer.className = "hero__bg-layer";
     layer.dataset.parallax = "bg";
-    layer.style.backgroundImage = `url("${loc.bg}")`;
+    layer.dataset.bg = loc.bg;
+    layer.dataset.bgIndex = String(i);
     bgSlide.appendChild(layer);
     bgWrapper.appendChild(bgSlide);
     parallax?.register?.(layer);

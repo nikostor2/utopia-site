@@ -1,4 +1,5 @@
 import { OPENING_SLIDES } from "./data.js";
+import { attachLazyVideo, clearVideoSource, ensureVideoSource } from "./lazy-media.js";
 
 const SLIDE_COUNT = OPENING_SLIDES.length;
 
@@ -9,7 +10,7 @@ const SWIPE_LOCK_Y = 8;
 function appendSlideVideo(slideEl, slide) {
   const video = document.createElement("video");
   video.className = "opening__bg-media";
-  video.src = slide.video;
+  video.dataset.src = slide.video;
   video.muted = true;
   video.defaultMuted = true;
   video.loop = true;
@@ -17,7 +18,7 @@ function appendSlideVideo(slideEl, slide) {
   video.playsInline = true;
   video.setAttribute("playsinline", "");
   video.setAttribute("webkit-playsinline", "true");
-  video.preload = "metadata";
+  video.preload = "none";
   video.style.width = `${slide.mediaWidth}px`;
   video.style.left = slide.mediaLeft;
   slideEl.appendChild(video);
@@ -30,17 +31,13 @@ function playActiveVideo(section, index) {
   const activeVideo = activeSlide?.querySelector("video.opening__bg-media");
 
   section.querySelectorAll("video.opening__bg-media").forEach((node) => {
-    node.pause();
-    if (node !== activeVideo) {
-      node.preload = "metadata";
-    }
+    if (node !== activeVideo) clearVideoSource(node);
   });
 
   if (!activeVideo) return;
 
-  activeVideo.muted = true;
-  activeVideo.defaultMuted = true;
-  activeVideo.preload = "auto";
+  const slide = OPENING_SLIDES[index];
+  ensureVideoSource(activeVideo, slide?.video);
 
   const tryPlay = () => {
     const promise = activeVideo.play();
@@ -53,9 +50,6 @@ function playActiveVideo(section, index) {
   }
 
   activeVideo.addEventListener("loadeddata", tryPlay, { once: true });
-  if (activeVideo.networkState !== HTMLMediaElement.NETWORK_LOADING) {
-    activeVideo.load();
-  }
 }
 
 function syncPill(pillLabel, index) {
@@ -76,6 +70,7 @@ export function initOpening() {
 
   let index = 0;
   let unlockedPlayback = false;
+  let sectionVisible = false;
 
   OPENING_SLIDES.forEach((slide, i) => {
     const slideEl = document.createElement("div");
@@ -92,6 +87,18 @@ export function initOpening() {
 
   const slides = [...section.querySelectorAll(".opening__slide")];
 
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      sectionVisible = entries.some((entry) => entry.isIntersecting);
+      if (sectionVisible && unlockedPlayback) playActiveVideo(section, index);
+      if (!sectionVisible) {
+        section.querySelectorAll("video.opening__bg-media").forEach(clearVideoSource);
+      }
+    },
+    { rootMargin: "200px", threshold: 0.08 }
+  );
+  sectionObserver.observe(section);
+
   function render() {
     slides.forEach((el, i) => {
       const active = i === index;
@@ -99,7 +106,7 @@ export function initOpening() {
       el.setAttribute("aria-hidden", active ? "false" : "true");
     });
     syncPill(pillLabel, index);
-    playActiveVideo(section, index);
+    if (sectionVisible && unlockedPlayback) playActiveVideo(section, index);
   }
 
   function stepForward() {
@@ -189,7 +196,7 @@ export function initOpening() {
   const unlock = () => {
     if (unlockedPlayback) return;
     unlockedPlayback = true;
-    playActiveVideo(section, index);
+    if (sectionVisible) playActiveVideo(section, index);
   };
 
   mediaEl?.addEventListener("touchstart", unlock, { passive: true, once: true });
