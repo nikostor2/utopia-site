@@ -3,6 +3,7 @@
  */
 import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
 import { HERO_LOCATIONS } from "./data.js";
+import { loadBackgroundImage, prefetchImage } from "./lazy-media.js";
 
 /** Figma hero location card — 314×420 */
 const HERO_CARD_DESIGN_W = 314;
@@ -59,7 +60,21 @@ export function initHero(parallax) {
 
   applyHeroCardMetrics();
 
-  HERO_LOCATIONS.forEach((loc) => {
+  function loadHeroSlidesAround(realIndex) {
+    const count = HERO_LOCATIONS.length;
+    for (let offset = -1; offset <= 1; offset += 1) {
+      const i = (realIndex + offset + count) % count;
+      section.querySelectorAll(`.hero__bg-layer[data-bg-index="${i}"]`).forEach((layer) => {
+        loadBackgroundImage(layer, layer.dataset.bg, null);
+      });
+    }
+    const next = (realIndex + 2) % count;
+    const prev = (realIndex - 2 + count) % count;
+    prefetchImage(HERO_LOCATIONS[next]?.bg);
+    prefetchImage(HERO_LOCATIONS[prev]?.bg);
+  }
+
+  HERO_LOCATIONS.forEach((loc, i) => {
     const bgSlide = document.createElement("div");
     bgSlide.className = "swiper-slide";
     const layer = document.createElement("div");
@@ -105,6 +120,7 @@ export function initHero(parallax) {
   function syncHero(cardsSwiper, speed = transitionMs) {
     syncBgFromCards(cardsSwiper, speed);
     syncCenterCard(cardsSwiper);
+    loadHeroSlidesAround(cardsSwiper.realIndex);
   }
 
   const bgSwiper = new Swiper(bgSwiperEl, {

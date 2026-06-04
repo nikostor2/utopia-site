@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/tokens.css?v=20260604-1755" />
     <link rel="stylesheet" href="css/base.css?v=20260602-1430" />
     <link rel="stylesheet" href="css/components.css?v=20260603-1200" />
-    <link rel="stylesheet" href="css/sections.css?v=20260604-1815" />
+    <link rel="stylesheet" href="css/sections.css?v=20260604-1820" />
     <link rel="stylesheet" href="css/menu.css?v=20260604-1810" />
     <link rel="stylesheet" href="css/parallax.css?v=20260602-1430" />
     <link rel="stylesheet" href="css/responsive.css?v=20260604-1815" />
@@ -22,6 +22,12 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="css/hero-swiper.css?v=20260604-1755" />
+    <link
+      rel="preload"
+      as="image"
+      href="assets/enhanced_hero-bg-roca.png?v=20260604-1735"
+      fetchpriority="high"
+    />
   </head>
   <body>
     <div class="page">
@@ -147,15 +153,14 @@
           <div class="parallax-media beyond__image-wrap">
             <video
               class="beyond__image beyond__video"
-              src="assets/jet.mp4?v=20260604-1527"
+              data-src="assets/jet.mp4?v=20260604-1527"
               poster="assets/beyond-jet.png?v=20260602-1430"
               width="314"
               height="200"
               muted
               loop
               playsinline
-              autoplay
-              preload="auto"
+              preload="none"
               aria-label="Private jet over mountains"
             ></video>
           </div>
@@ -174,15 +179,14 @@
           <div class="parallax-media beyond__image-wrap">
             <video
               class="beyond__image beyond__video"
-              src="assets/yacht.mp4?v=20260604-1525"
+              data-src="assets/yacht.mp4?v=20260604-1525"
               poster="assets/beyond-yacht.png?v=20260602-1430"
               width="314"
               height="200"
               muted
               loop
               playsinline
-              autoplay
-              preload="auto"
+              preload="none"
               aria-label="Superyacht at sea"
             ></video>
           </div>
@@ -242,13 +246,12 @@
         <div class="cta-final__bg" aria-hidden="true">
           <video
             class="cta-final__video"
-            src="assets/footer.mp4?v=20260604-1740"
+            data-src="assets/footer.mp4?v=20260604-1740"
             poster="assets/cta-nature.jpg?v=20260602-1458"
             muted
             loop
             playsinline
-            autoplay
-            preload="auto"
+            preload="none"
           ></video>
         </div>
 
@@ -354,6 +357,6 @@
       </button>
     </nav>
 
-    <script type="module" src="js/main.js?v=20260604-1800"></script>
+    <script type="module" src="js/main.js?v=20260604-1820"></script>
   </body>
 </html>

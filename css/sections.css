@@ -135,13 +135,18 @@
   position: absolute;
   inset: 0;
   background-color: #e6dccd;
-  background-image:
-    linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%),
-    url("../assets/ecosystem-bg-2.jpg"),
-    url("../assets/ecosystem-bg-jeri-lobby.png?v=20260602-1724");
+  background-image: linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%);
   background-size: cover;
   background-position: center;
-  transition: opacity 0.8s var(--ease-cinematic);
+  transition: opacity 0.45s var(--ease-cinematic);
+}
+
+.ecosystem__bg.is-loading {
+  opacity: 0.94;
+}
+
+.ecosystem__bg.is-ready {
+  opacity: 1;
 }
 
 .ecosystem--coming-soon .ecosystem__bg {

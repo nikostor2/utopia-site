@@ -1,4 +1,7 @@
 import { LOCATION_GROUPS } from "./data.js";
+import { loadBackgroundImage, prefetchImage, ECOSYSTEM_GRADIENT } from "./lazy-media.js";
+
+const ALPINE_PLACEHOLDER = "assets/ecosystem-bg-alpine.png?v=20260602-1746";
 
 export function initLocations() {
   const section = document.querySelector(".ecosystem");
@@ -15,6 +18,7 @@ export function initLocations() {
 
   let group = "tropical";
   let index = 0;
+  let photosEnabled = false;
   const groupOrder = tabs.map((tab) => tab.dataset.group).filter(Boolean);
 
   function groupAt(offset) {
@@ -51,6 +55,33 @@ export function initLocations() {
     return LOCATION_GROUPS[group] || [];
   }
 
+  function prefetchEcosystemNeighbors() {
+    const list = currentList();
+    if (!list.length) return;
+    const urls = [
+      list[(index - 1 + list.length) % list.length]?.image,
+      list[(index + 1) % list.length]?.image,
+    ].filter(Boolean);
+    urls.forEach(prefetchImage);
+  }
+
+  function applyEcosystemPhoto(url) {
+    if (!bg || !url) return;
+    if (!photosEnabled) {
+      bg.style.backgroundImage = ECOSYSTEM_GRADIENT;
+      bg.dataset.pendingImage = url;
+      return;
+    }
+    loadBackgroundImage(bg, url);
+    prefetchEcosystemNeighbors();
+  }
+
+  function enableEcosystemPhotos() {
+    if (photosEnabled) return;
+    photosEnabled = true;
+    render();
+  }
+
   function render() {
     const list = currentList();
     const comingSoon = list.length === 0;
@@ -70,10 +101,7 @@ export function initLocations() {
         pill.setAttribute("aria-disabled", "true");
       }
       if (bg) {
-        bg.style.backgroundImage = `
-        linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%),
-        url("assets/ecosystem-bg-alpine.png?v=20260602-1746")
-      `;
+        applyEcosystemPhoto(ALPINE_PLACEHOLDER);
       }
     } else {
       const item = list[index];
@@ -86,11 +114,8 @@ export function initLocations() {
         pill.title = label;
         pill.removeAttribute("aria-disabled");
       }
-      if (bg && item.image) {
-        bg.style.backgroundImage = `
-        linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%),
-        url("${item.image}")
-      `;
+      if (item.image) {
+        applyEcosystemPhoto(item.image);
       }
     }
 
@@ -101,8 +126,20 @@ export function initLocations() {
     });
   }
 
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        enableEcosystemPhotos();
+        sectionObserver.disconnect();
+      }
+    },
+    { rootMargin: "280px" }
+  );
+  sectionObserver.observe(section);
+
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
+      enableEcosystemPhotos();
       const g = tab.dataset.group;
       if (!g) return;
       group = g;
@@ -112,11 +149,13 @@ export function initLocations() {
   });
 
   prev?.addEventListener("click", () => {
+    enableEcosystemPhotos();
     stepBackward();
     render();
   });
 
   next?.addEventListener("click", () => {
+    enableEcosystemPhotos();
     stepForward();
     render();
   });
@@ -134,6 +173,7 @@ export function initLocations() {
 
   media?.addEventListener("pointerdown", (e) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    enableEcosystemPhotos();
     pointerId = e.pointerId;
     startX = e.clientX;
     startY = e.clientY;
@@ -141,7 +181,6 @@ export function initLocations() {
     gestureLocked = false;
     horizontalGesture = false;
 
-    // Keep tracking even if finger leaves media bounds.
     if (media.hasPointerCapture && !media.hasPointerCapture(e.pointerId)) {
       media.setPointerCapture(e.pointerId);
     }
@@ -155,7 +194,6 @@ export function initLocations() {
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
 
-    // Keep vertical page scroll as priority unless horizontal intent is clear.
     if (!gestureLocked && (absX > SWIPE_LOCK_X || absY > SWIPE_LOCK_Y)) {
       gestureLocked = true;
       horizontalGesture = absX > absY * 1.1;
