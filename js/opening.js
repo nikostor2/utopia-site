@@ -4,79 +4,36 @@ import { OPENING_SLIDES } from "./data.js";
 const OPENING_SWIPER = {
   slidesPerView: 1,
   slidesPerGroup: 1,
-  /* Loop clones make 3-slide carousels skip; rewind cycles without jumps. */
-  loop: false,
-  rewind: true,
+  loop: true,
+  loopAdditionalSlides: 2,
   speed: 400,
   spaceBetween: 0,
 };
 
-function appendSlideMedia(slideEl, slide) {
-  if (slide.video) {
-    const video = document.createElement("video");
-    video.className = "opening__bg-media";
-    video.src = slide.video;
-    video.poster = slide.image || "";
-    video.muted = true;
-    video.defaultMuted = true;
-    video.loop = true;
-    video.autoplay = false;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "true");
-    video.preload = "auto";
-    video.style.width = `${slide.mediaWidth}px`;
-    video.style.left = slide.mediaLeft;
-
-    video.addEventListener(
-      "error",
-      () => {
-        const img = document.createElement("img");
-        img.className = "opening__bg-media";
-        img.src = slide.image;
-        img.alt = "";
-        img.style.width = `${slide.mediaWidth}px`;
-        img.style.left = slide.mediaLeft;
-        video.replaceWith(img);
-      },
-      { once: true }
-    );
-
-    slideEl.appendChild(video);
-    return video;
-  }
-
-  if (slide.stacked && slide.layers) {
-    const stack = document.createElement("div");
-    stack.className = "opening__bg-stack";
-    stack.style.left = slide.mediaLeft;
-    stack.style.width = `${slide.mediaWidth}px`;
-    slide.layers.forEach((src) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "";
-      stack.appendChild(img);
-    });
-    slideEl.appendChild(stack);
-    return null;
-  }
-
-  const img = document.createElement("img");
-  img.className = "opening__bg-media";
-  img.src = slide.image;
-  img.alt = "";
-  img.style.width = `${slide.mediaWidth}px`;
-  img.style.left = slide.mediaLeft;
-  slideEl.appendChild(img);
-  return null;
+function appendSlideVideo(slideEl, slide) {
+  const video = document.createElement("video");
+  video.className = "opening__bg-media";
+  video.src = slide.video;
+  video.muted = true;
+  video.defaultMuted = true;
+  video.loop = true;
+  video.autoplay = false;
+  video.playsInline = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "true");
+  video.preload = "auto";
+  video.style.width = `${slide.mediaWidth}px`;
+  video.style.left = slide.mediaLeft;
+  slideEl.appendChild(video);
+  return video;
 }
 
-function playActiveVideo(section, swiper) {
+function playActiveVideo(section) {
   section.querySelectorAll("video.opening__bg-media").forEach((node) => {
     node.pause();
   });
 
-  const slide = swiper.slides[swiper.activeIndex];
+  const slide = section.querySelector(".opening__slider .swiper-slide-active");
   const video = slide?.querySelector("video.opening__bg-media");
   if (!video) return;
 
@@ -124,7 +81,7 @@ export function initOpening() {
 
     const inner = document.createElement("div");
     inner.className = `opening__bg-slide opening__bg-slide--${i}`;
-    appendSlideMedia(inner, slide);
+    if (slide.video) appendSlideVideo(inner, slide);
     swiperSlide.appendChild(inner);
     wrapper.appendChild(swiperSlide);
   });
@@ -133,7 +90,7 @@ export function initOpening() {
     slidesPerView: OPENING_SWIPER.slidesPerView,
     slidesPerGroup: OPENING_SWIPER.slidesPerGroup,
     loop: OPENING_SWIPER.loop,
-    rewind: OPENING_SWIPER.rewind,
+    loopAdditionalSlides: OPENING_SWIPER.loopAdditionalSlides,
     speed: reducedMotion ? 0 : OPENING_SWIPER.speed,
     spaceBetween: OPENING_SWIPER.spaceBetween,
     grabCursor: true,
@@ -143,18 +100,19 @@ export function initOpening() {
     shortSwipes: true,
     preventInteractionOnTransition: true,
     touchStartPreventDefault: false,
+    watchSlidesProgress: true,
     navigation: {
       prevEl: prevBtn,
       nextEl: nextBtn,
     },
     on: {
       init(swiper) {
-        syncPill(pillLabel, swiper.activeIndex);
-        playActiveVideo(section, swiper);
+        syncPill(pillLabel, swiper.realIndex);
+        playActiveVideo(section);
       },
       slideChangeTransitionEnd(swiper) {
-        syncPill(pillLabel, swiper.activeIndex);
-        playActiveVideo(section, swiper);
+        syncPill(pillLabel, swiper.realIndex);
+        playActiveVideo(section);
       },
     },
   });
@@ -162,7 +120,7 @@ export function initOpening() {
   const unlock = () => {
     if (unlockedPlayback) return;
     unlockedPlayback = true;
-    playActiveVideo(section, openingSwiper);
+    playActiveVideo(section);
   };
 
   section.querySelector(".opening__media")?.addEventListener("touchstart", unlock, {

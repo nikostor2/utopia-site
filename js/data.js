@@ -85,27 +85,18 @@ export const OPENING_SLIDES = [
   {
     label: "Kite surfing",
     video: "assets/kitesurf.mp4?v=20260604-1346",
-    layers: [
-      "assets/opening-slide-1a.jpg",
-      "assets/opening-slide-1b.jpg",
-      "assets/opening-slide-1c.png?v=20260602-1430",
-    ],
-    image: "assets/opening-slide-1c.png?v=20260602-1430",
     mediaWidth: 696,
     mediaLeft: "calc(50% - 348px + 143px)",
-    stacked: true,
   },
   {
     label: "Tropics exploration",
     video: "assets/tropics.mp4?v=20260604-1410",
-    image: "assets/opening-slide-2.png?v=20260602-1430",
     mediaWidth: 394,
     mediaLeft: "calc(50% - 197px - 8px)",
   },
   {
     label: "Wellness",
     video: "assets/wellness.mp4?v=20260604-1555",
-    image: "assets/opening-slide-3.png?v=20260602-1430",
     mediaWidth: 408,
     mediaLeft: "calc(50% - 204px - 1px)",
   },

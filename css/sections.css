@@ -326,6 +326,15 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background: #f9f5ea;
+}
+
+/* Hide off-screen slide videos; keep prev/next visible during swipe */
+.opening__slider
+  .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-prev):not(.swiper-slide-next)
+  .opening__bg-media {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .opening__bg-slide--0 .opening__bg-media {
@@ -357,23 +366,7 @@
 
 video.opening__bg-media {
   display: block;
-  background: #000;
-}
-
-.opening__bg-slide--0 .opening__bg-stack {
-  position: absolute;
-  top: 0;
-  width: 696px;
-  height: 100%;
-  left: calc(50% - 348px + 143px);
-}
-
-.opening__bg-stack img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background: #f9f5ea;
 }
 
 .opening__content {
@@ -699,13 +692,15 @@ video.opening__bg-media {
   box-shadow: none;
   transition:
     left var(--days-duration) var(--days-ease),
+    width var(--days-duration) var(--days-ease),
+    height var(--days-duration) var(--days-ease),
     transform var(--days-duration) var(--days-ease),
     opacity var(--days-duration) var(--days-ease),
     border-radius var(--days-duration) var(--days-ease),
     box-shadow var(--days-duration) var(--days-ease);
   z-index: 0;
   pointer-events: none;
-  will-change: transform;
+  will-change: left, width, height, transform;
 }
 
 .days__card.is-active {
