@@ -67,7 +67,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-section-gap-lg);
+  gap: 48px;
   margin-top: 25px;
   padding: 0 var(--pad-right) 0 var(--pad-left);
   width: 100%;
@@ -79,6 +79,17 @@
 .menu__nav .footer__links {
   width: 100%;
   max-width: 100%;
+}
+
+.menu__nav .menu__links {
+  gap: 40px;
+}
+
+.menu__link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
 }
 
 body.menu-open {

@@ -108,7 +108,7 @@ body {
 }
 
 .footer {
-  padding-bottom: calc(var(--dock-safe) + 32px);
+  padding-bottom: calc(var(--dock-safe) + 48px);
 }
 
 .days {

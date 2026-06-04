@@ -929,12 +929,13 @@ video.opening__bg-media {
   left: var(--pad-left);
   right: var(--pad-right);
   top: var(--space-section-top-lg);
+  bottom: 48px;
   width: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-section-gap-lg);
+  gap: 48px;
 }
 
 .footer__destinations {
