@@ -1,7 +1,10 @@
 const ECOSYSTEM_GRADIENT =
   "linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%)";
 
-export const MEDIA_VERSION = "20260604-2010";
+export const MEDIA_VERSION = "20260604-2205";
+
+/** No re-encode — keeps full source bitrate (footer CTA). */
+const SOURCE_ONLY_VIDEOS = new Set(["footer"]);
 
 const loaded = new Map();
 
@@ -9,14 +12,13 @@ function cacheKey(url) {
   return url;
 }
 
-/** Mobile delivery — high-res JPEG in assets/opt/ (see scripts/optimize-media.sh). */
+/** Mobile delivery — full-res JPEG in assets/opt/ (see scripts/optimize-media.sh). */
 export function resolveImageUrl(url) {
   if (!url) return url;
-  const [path, query] = url.split("?");
+  const [path] = url.split("?");
   const match = path.match(/^assets\/(.+)\.(png|jpe?g)$/i);
   if (!match) return url;
-  const v = query?.includes("v=") ? query : `v=${MEDIA_VERSION}`;
-  return `assets/opt/${match[1]}.jpg?${v}`;
+  return `assets/opt/${match[1]}.jpg?v=${MEDIA_VERSION}`;
 }
 
 function applyBackground(el, deliveryUrl, gradient) {
@@ -106,11 +108,13 @@ export function prefetchImages(urls) {
 
 export function resolveVideoUrl(url) {
   if (!url) return url;
-  const [path, query] = url.split("?");
+  const [path] = url.split("?");
   const match = path.match(/^assets\/(.+)\.mp4$/i);
   if (!match) return url;
-  const v = query?.includes("v=") ? query : `v=${MEDIA_VERSION}`;
-  return `assets/opt/${match[1]}.mp4?${v}`;
+  if (SOURCE_ONLY_VIDEOS.has(match[1])) {
+    return `${path}?v=${MEDIA_VERSION}`;
+  }
+  return `assets/opt/${match[1]}.mp4?v=${MEDIA_VERSION}`;
 }
 
 export function ensureVideoSource(video, url) {

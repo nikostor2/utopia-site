@@ -6,7 +6,7 @@ import {
   ECOSYSTEM_GRADIENT,
 } from "./lazy-media.js";
 
-const ALPINE_PLACEHOLDER = "assets/ecosystem-bg-alpine.png?v=20260602-1746";
+const ALPINE_PLACEHOLDER = "assets/ecosystem-bg-alpine.png";
 
 export function initLocations() {
   const section = document.querySelector(".ecosystem");
