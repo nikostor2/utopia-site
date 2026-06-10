@@ -132,7 +132,7 @@ export function initLocations() {
       else if (pill) pill.textContent = label;
       if (pill) pill.classList.remove("ecosystem__location-pill--static");
       if (pillIsLink) {
-        pill.href = "../coming-soon.html";
+        pill.href = "coming-soon.html";
         pill.title = label;
         pill.removeAttribute("aria-disabled");
       }
