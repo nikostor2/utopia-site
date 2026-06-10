@@ -571,23 +571,22 @@ video.opening__bg-media {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-xs);
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 .beyond__card-title {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 13px;
-  line-height: 1.25;
+  font-size: 18px;
+  line-height: 1.3;
   color: #161514;
 }
 
 .beyond__chevron {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
-  opacity: 0.85;
 }
 
 .beyond__desc {
@@ -595,7 +594,7 @@ video.opening__bg-media {
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 12px;
-  line-height: 1.35;
+  line-height: normal;
   color: var(--color-text-muted);
 }
 
