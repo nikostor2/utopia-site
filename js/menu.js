@@ -1,4 +1,5 @@
 import { collapseDestinations } from "./destinations-nav.js";
+import { setSiteLogoMenuOpen } from "./site-logo.js";
 
 export function initMenu() {
   const menu = document.getElementById("site-menu");
@@ -19,16 +20,26 @@ export function initMenu() {
   }
 
   function unlockBodyScroll() {
+    const y = savedScrollY;
+    const html = document.documentElement;
+    const previousScrollBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+
     document.body.style.position = "";
     document.body.style.top = "";
     document.body.style.left = "";
     document.body.style.right = "";
     document.body.style.width = "";
-    window.scrollTo(0, savedScrollY);
+    window.scrollTo(0, y);
+
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = previousScrollBehavior;
+    });
   }
 
   function openMenu() {
     lockBodyScroll();
+    setSiteLogoMenuOpen(true);
     menu.classList.add("is-open");
     menu.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
@@ -42,8 +53,9 @@ export function initMenu() {
     menu.setAttribute("aria-hidden", "true");
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-label", "Open menu");
-    document.body.classList.remove("menu-open");
     unlockBodyScroll();
+    setSiteLogoMenuOpen(false);
+    document.body.classList.remove("menu-open");
     menuScroll?.scrollTo(0, 0);
     collapseDestinations(destContainer);
   }
@@ -52,9 +64,39 @@ export function initMenu() {
     return menu.classList.contains("is-open");
   }
 
+  function navigateToHero(href) {
+    const url = new URL(href, window.location.href);
+    const onIndex = url.pathname.endsWith("/") || url.pathname.endsWith("index.html");
+
+    if (!onIndex || url.origin !== window.location.origin) {
+      window.location.assign(url.href);
+      return;
+    }
+
+    const target = document.querySelector(url.hash || "#top");
+    const html = document.documentElement;
+    const previousScrollBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    target?.scrollIntoView({ block: "start" });
+    history.replaceState(null, "", url.hash || "#top");
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = previousScrollBehavior;
+    });
+  }
+
   toggle.addEventListener("click", () => {
     if (isOpen()) closeMenu();
     else openMenu();
+  });
+
+  document.querySelectorAll(".dock__home").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      if (!isOpen()) return;
+      e.preventDefault();
+      const href = link.getAttribute("href") || "#top";
+      closeMenu();
+      requestAnimationFrame(() => navigateToHero(href));
+    });
   });
 
   menu.querySelectorAll(".menu__header a").forEach((link) => {

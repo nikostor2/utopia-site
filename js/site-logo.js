@@ -1,4 +1,10 @@
 /** Hero emblem stays fixed while hero is on screen; compact bar replaces it after. */
+let setSiteLogoMenuOpenFn = null;
+
+export function setSiteLogoMenuOpen(open) {
+  setSiteLogoMenuOpenFn?.(open);
+}
+
 export function initSiteLogo() {
   const hero = document.querySelector(".hero");
   const bar = document.getElementById("site-logo-bar");
@@ -10,6 +16,7 @@ export function initSiteLogo() {
   }
 
   let onHero = null;
+  let menuPaused = false;
 
   const setBarVisible = (visible) => {
     const isVisible = bar.classList.contains("is-visible");
@@ -43,8 +50,18 @@ export function initSiteLogo() {
     setBarVisible(!visible);
   };
 
+  function readOnHero() {
+    const rect = hero.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < window.innerHeight;
+  }
+
+  function syncSiteLogo() {
+    setOnHero(readOnHero());
+  }
+
   const heroObserver = new IntersectionObserver(
     ([entry]) => {
+      if (menuPaused) return;
       setOnHero(entry.isIntersecting);
     },
     { threshold: 0 }
@@ -52,9 +69,11 @@ export function initSiteLogo() {
 
   heroObserver.observe(hero);
 
+  setSiteLogoMenuOpenFn = (open) => {
+    menuPaused = open;
+    if (!open) syncSiteLogo();
+  };
+
   setBarVisible(false);
-  requestAnimationFrame(() => {
-    const rect = hero.getBoundingClientRect();
-    setOnHero(rect.bottom > 0 && rect.top < window.innerHeight);
-  });
+  requestAnimationFrame(syncSiteLogo);
 }

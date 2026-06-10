@@ -27,7 +27,8 @@
   display: none !important;
 }
 
-body.menu-open .hero__logo {
+body.menu-open .hero__logo,
+body.is-past-hero .hero__logo {
   display: none !important;
   pointer-events: none;
 }
@@ -247,6 +248,18 @@ body.menu-open .site-logo-bar {
 .dock__icon-btn img {
   width: 16px;
   height: 16px;
+}
+
+.dock__home {
+  text-decoration: none;
+  color: inherit;
+}
+
+.dock__home-mark {
+  display: block;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* Buttons */
