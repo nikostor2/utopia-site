@@ -1,4 +1,4 @@
-/* Logo — white on hero; dark on full-width beige bar when scrolled */
+/* Logo — white emblem on hero; black wordmark on 56px glass bar when scrolled (Figma 900:1549) */
 .logo {
   display: block;
   text-decoration: none;
@@ -44,7 +44,8 @@
 
 .site-logo__mark--dark {
   display: none;
-  width: 76px;
+  width: 100px;
+  height: auto;
 }
 
 .site-logo.is-compact {
@@ -53,12 +54,14 @@
   right: 0;
   width: 100%;
   max-width: none;
+  height: calc(56px + env(safe-area-inset-top, 0px));
+  box-sizing: border-box;
   transform: none;
-  padding: max(10px, env(safe-area-inset-top, 0px)) 0 10px;
-  background: rgba(229, 218, 203, 0.78);
+  padding: env(safe-area-inset-top, 0px) 0 0;
+  background: var(--color-glass);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  box-shadow: 0 1px 12px rgba(22, 21, 20, 0.06);
+  box-shadow: none;
 }
 
 .site-logo.is-compact .site-logo__mark--light {

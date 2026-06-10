@@ -1,4 +1,4 @@
-/** Fixed logo — white on hero; dark on full-width beige bar after scroll. */
+/** Fixed logo — white emblem on hero; black wordmark on 56px glass bar after scroll. */
 export function initSiteLogo() {
   const hero = document.querySelector(".hero");
   const logo = document.querySelector(".site-logo");
