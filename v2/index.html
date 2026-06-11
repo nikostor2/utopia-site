@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/tokens.css?v=20260610-2600" />
     <link rel="stylesheet" href="css/base.css?v=20260602-1430" />
     <link rel="stylesheet" href="css/components.css?v=20260610-2740" />
-    <link rel="stylesheet" href="css/sections.css?v=20260610-2440" />
+    <link rel="stylesheet" href="css/sections.css?v=20260610-2760" />
     <link rel="stylesheet" href="css/menu.css?v=20260610-2750" />
     <link rel="stylesheet" href="css/parallax.css?v=20260610-1310" />
     <link rel="stylesheet" href="css/responsive.css?v=20260610-2600" />
@@ -126,7 +126,16 @@
           <div class="ecosystem__bg" role="img" aria-label="Destination preview"></div>
 
           <div class="ecosystem__tabs-block">
-            <div class="ecosystem__tabs-line" aria-hidden="true"></div>
+            <div
+              class="ecosystem__tabs-line"
+              role="progressbar"
+              aria-label="Destination progress"
+              aria-valuemin="1"
+              aria-valuemax="1"
+              aria-valuenow="1"
+            >
+              <div class="ecosystem__tabs-progress"></div>
+            </div>
             <nav class="ecosystem__tabs" aria-label="Location types">
               <button type="button" class="ecosystem__tab is-active" data-group="tropical">Tropical</button>
               <button type="button" class="ecosystem__tab" data-group="urban">Urban</button>
@@ -392,6 +401,6 @@
       <a class="dock-bar__cta" href="#request">Request a stay</a>
     </nav>
 
-    <script type="module" src="js/main.js?v=20260610-2750"></script>
+    <script type="module" src="js/main.js?v=20260610-2760"></script>
   </body>
 </html>

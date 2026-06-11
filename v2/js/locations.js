@@ -24,6 +24,8 @@ export function initLocations() {
   const pillLabel = pill?.querySelector(".ecosystem__location-pill__label");
   const pillIsLink = pill?.tagName === "A";
   const tabs = [...section.querySelectorAll(".ecosystem__tab")];
+  const progressBar = section.querySelector(".ecosystem__tabs-line");
+  const progressFill = section.querySelector(".ecosystem__tabs-progress");
   const prev = section.querySelector(".ecosystem__nav-btn--prev");
   const next = section.querySelector(".ecosystem__nav-btn--next");
   const media = section.querySelector(".ecosystem__media");
@@ -65,6 +67,39 @@ export function initLocations() {
 
   function currentList() {
     return LOCATION_GROUPS[group] || [];
+  }
+
+  function buildLocationSteps() {
+    const steps = [];
+    for (const g of groupOrder) {
+      const list = LOCATION_GROUPS[g] || [];
+      if (list.length === 0) {
+        steps.push({ group: g, index: 0 });
+        continue;
+      }
+      for (let i = 0; i < list.length; i += 1) {
+        steps.push({ group: g, index: i });
+      }
+    }
+    return steps;
+  }
+
+  function updateProgressBar() {
+    if (!progressFill) return;
+
+    const steps = buildLocationSteps();
+    const total = steps.length;
+    const currentStep = steps.findIndex((step) => step.group === group && step.index === index);
+    const safeStep = currentStep >= 0 ? currentStep : 0;
+    const progress = total <= 1 ? 100 : ((safeStep + 1) / total) * 100;
+
+    progressFill.style.width = `${progress}%`;
+
+    if (progressBar) {
+      progressBar.setAttribute("aria-valuemin", "1");
+      progressBar.setAttribute("aria-valuemax", String(total));
+      progressBar.setAttribute("aria-valuenow", String(safeStep + 1));
+    }
   }
 
   function prefetchEcosystemNeighbors() {
@@ -146,6 +181,8 @@ export function initLocations() {
       tab.classList.toggle("is-active", isActive);
       tab.setAttribute("aria-selected", isActive ? "true" : "false");
     });
+
+    updateProgressBar();
   }
 
   const sectionObserver = new IntersectionObserver(

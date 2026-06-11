@@ -155,10 +155,25 @@
   right: 0;
   top: 29px;
   width: 100%;
-  height: 0;
+  height: 1px;
   margin: 0;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.ecosystem__tabs-progress {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #ffffff;
+  transition: width 0.45s var(--ease-cinematic);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecosystem__tabs-progress {
+    transition: none;
+  }
 }
 
 /* Figma 693:2902 — Tropical / Urban / Alpine across 314px content lane */
