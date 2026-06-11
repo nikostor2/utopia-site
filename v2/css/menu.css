@@ -54,6 +54,7 @@ body.is-past-hero .menu.is-closing .menu__panel {
 
 body.is-past-hero.menu-open .menu__toolbar,
 body.is-past-hero .menu.is-closing .menu__toolbar {
+  display: none;
   visibility: hidden;
   pointer-events: none;
 }

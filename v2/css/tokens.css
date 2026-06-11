@@ -56,7 +56,11 @@
 
   --chrome-bar-height: 56px;
   --site-chrome-height: calc(var(--chrome-bar-height) + env(safe-area-inset-top, 0px));
-  --dock-bar-height: calc(var(--chrome-bar-height) + env(safe-area-inset-bottom, 0px));
+  --dock-bar-pad-y: 8px;
+  --dock-cta-block: 45px;
+  --dock-bar-height: calc(
+    var(--dock-bar-pad-y) * 2 + var(--dock-cta-block) + env(safe-area-inset-bottom, 0px)
+  );
   --dock-safe: var(--dock-bar-height);
 
   --ease-cinematic: cubic-bezier(0.4, 0, 0.2, 1);

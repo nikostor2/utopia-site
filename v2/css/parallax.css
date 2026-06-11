@@ -5,19 +5,22 @@
 
   .hero__bg-layer[data-parallax="bg"],
   .ecosystem__bg[data-parallax="bg"] {
-    top: -2%;
-    bottom: 0;
-    height: 104%;
+    transform-origin: center center;
   }
 
   .hero__bg-layer[data-parallax="bg"] {
+    top: -2%;
+    bottom: 0;
+    height: 104%;
     left: -14%;
     width: 128%;
   }
 
   .ecosystem__bg[data-parallax="bg"] {
-    left: 0;
-    width: 100%;
+    top: -20%;
+    height: 140%;
+    left: -12%;
+    width: 124%;
   }
 
   .parallax-media {

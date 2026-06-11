@@ -1,5 +1,5 @@
 const SHIFT_PX = 16;
-const SCALE_BG = 1;
+const SCALE_BG = 1.14;
 const SCALE_IMG = 1.14;
 
 /**

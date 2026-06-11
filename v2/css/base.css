@@ -21,7 +21,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* iOS home-indicator strip — Safari otherwise shows white under controls */
+/* iOS home-indicator strip — hidden when dock covers the safe area */
+body:has(.dock-bar)::after {
+  display: none;
+}
+
 body::after {
   content: "";
   position: fixed;
