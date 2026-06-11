@@ -54,14 +54,18 @@ function playActiveVideo(section, index) {
 
 function syncProgress(section, index) {
   const caption = section.querySelector(".opening__caption");
-  const progressFill = section.querySelector(".opening__progress-fill");
   const progressBar = section.querySelector(".opening__progress");
+  const segments = [...section.querySelectorAll(".opening__progress-segment")];
   const label = OPENING_SLIDES[index]?.label;
 
   if (caption && label) caption.textContent = label;
 
-  const pct = SLIDE_COUNT <= 1 ? 100 : ((index + 1) / SLIDE_COUNT) * 100;
-  if (progressFill) progressFill.style.width = `${pct}%`;
+  segments.forEach((segment, segmentIndex) => {
+    const fill = segment.querySelector(".opening__progress-fill");
+    if (!fill) return;
+    fill.style.width = segmentIndex === index ? "100%" : "0%";
+  });
+
   if (progressBar) {
     progressBar.setAttribute("aria-valuenow", String(index + 1));
     progressBar.setAttribute("aria-valuemax", String(SLIDE_COUNT));

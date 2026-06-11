@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="css/tokens.css?v=20260610-2780" />
     <link rel="stylesheet" href="css/base.css?v=20260610-2780" />
     <link rel="stylesheet" href="css/components.css?v=20260610-2780" />
-    <link rel="stylesheet" href="css/sections.css?v=20260610-2800" />
-    <link rel="stylesheet" href="css/menu.css?v=20260610-2780" />
+    <link rel="stylesheet" href="css/sections.css?v=20260611-2830" />
+    <link rel="stylesheet" href="css/menu.css?v=20260610-2810" />
     <link rel="stylesheet" href="css/parallax.css?v=20260610-1310" />
     <link rel="stylesheet" href="css/responsive.css?v=20260610-2600" />
     <link rel="stylesheet" href="css/reveal.css?v=20260604-1700" />
@@ -125,21 +125,33 @@
         <div class="ecosystem__media" data-reveal>
           <div class="ecosystem__bg" role="img" aria-label="Destination preview"></div>
 
-          <div class="ecosystem__tabs-block">
-            <div
-              class="ecosystem__tabs-line"
-              role="progressbar"
-              aria-label="Destination progress"
-              aria-valuemin="1"
-              aria-valuemax="1"
-              aria-valuenow="1"
-            >
-              <div class="ecosystem__tabs-progress"></div>
-            </div>
+          <div
+            class="ecosystem__tabs-block"
+            role="progressbar"
+            aria-label="Destination progress"
+            aria-valuemin="1"
+            aria-valuemax="1"
+            aria-valuenow="1"
+          >
             <nav class="ecosystem__tabs" aria-label="Location types">
-              <button type="button" class="ecosystem__tab is-active" data-group="tropical">Tropical</button>
-              <button type="button" class="ecosystem__tab" data-group="urban">Urban</button>
-              <button type="button" class="ecosystem__tab" data-group="alpine">Alpine</button>
+              <button type="button" class="ecosystem__tab is-active" data-group="tropical">
+                <span class="ecosystem__tab-label">Tropical</span>
+                <span class="ecosystem__tab-track" aria-hidden="true">
+                  <span class="ecosystem__tab-fill"></span>
+                </span>
+              </button>
+              <button type="button" class="ecosystem__tab" data-group="urban">
+                <span class="ecosystem__tab-label">Urban</span>
+                <span class="ecosystem__tab-track" aria-hidden="true">
+                  <span class="ecosystem__tab-fill"></span>
+                </span>
+              </button>
+              <button type="button" class="ecosystem__tab" data-group="alpine">
+                <span class="ecosystem__tab-label">Alpine</span>
+                <span class="ecosystem__tab-track" aria-hidden="true">
+                  <span class="ecosystem__tab-fill"></span>
+                </span>
+              </button>
             </nav>
           </div>
 
@@ -179,7 +191,15 @@
                 aria-valuemax="3"
                 aria-valuenow="1"
               >
-                <div class="opening__progress-fill"></div>
+                <div class="opening__progress-segment" aria-hidden="true">
+                  <span class="opening__progress-fill"></span>
+                </div>
+                <div class="opening__progress-segment" aria-hidden="true">
+                  <span class="opening__progress-fill"></span>
+                </div>
+                <div class="opening__progress-segment" aria-hidden="true">
+                  <span class="opening__progress-fill"></span>
+                </div>
               </div>
             </div>
             <button
@@ -308,7 +328,15 @@
                 aria-valuemax="3"
                 aria-valuenow="1"
               >
-                <div class="days__progress-fill"></div>
+                <div class="days__progress-segment" aria-hidden="true">
+                  <span class="days__progress-fill"></span>
+                </div>
+                <div class="days__progress-segment" aria-hidden="true">
+                  <span class="days__progress-fill"></span>
+                </div>
+                <div class="days__progress-segment" aria-hidden="true">
+                  <span class="days__progress-fill"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -413,6 +441,6 @@
       <a class="dock-bar__cta" href="#request">Request a stay</a>
     </nav>
 
-    <script type="module" src="js/main.js?v=20260610-2800"></script>
+    <script type="module" src="js/main.js?v=20260611-2830"></script>
   </body>
 </html>

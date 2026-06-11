@@ -24,8 +24,7 @@ export function initLocations() {
   const pillLabel = pill?.querySelector(".ecosystem__location-pill__label");
   const pillIsLink = pill?.tagName === "A";
   const tabs = [...section.querySelectorAll(".ecosystem__tab")];
-  const progressBar = section.querySelector(".ecosystem__tabs-line");
-  const progressFill = section.querySelector(".ecosystem__tabs-progress");
+  const progressBar = section.querySelector(".ecosystem__tabs-block");
   const prev = section.querySelector(".ecosystem__nav-btn--prev");
   const next = section.querySelector(".ecosystem__nav-btn--next");
   const media = section.querySelector(".ecosystem__media");
@@ -69,36 +68,27 @@ export function initLocations() {
     return LOCATION_GROUPS[group] || [];
   }
 
-  function buildLocationSteps() {
-    const steps = [];
-    for (const g of groupOrder) {
-      const list = LOCATION_GROUPS[g] || [];
-      if (list.length === 0) {
-        steps.push({ group: g, index: 0 });
-        continue;
-      }
-      for (let i = 0; i < list.length; i += 1) {
-        steps.push({ group: g, index: i });
-      }
-    }
-    return steps;
-  }
-
   function updateProgressBar() {
-    if (!progressFill) return;
+    tabs.forEach((tab) => {
+      const tabGroup = tab.dataset.group;
+      const fill = tab.querySelector(".ecosystem__tab-fill");
+      if (!tabGroup || !fill) return;
 
-    const steps = buildLocationSteps();
-    const total = steps.length;
-    const currentStep = steps.findIndex((step) => step.group === group && step.index === index);
-    const safeStep = currentStep >= 0 ? currentStep : 0;
-    const progress = total <= 1 ? 100 : ((safeStep + 1) / total) * 100;
+      let pct = 0;
+      if (tabGroup === group) {
+        const list = LOCATION_GROUPS[tabGroup] || [];
+        pct = list.length === 0 ? 0 : ((index + 1) / list.length) * 100;
+      }
 
-    progressFill.style.width = `${progress}%`;
+      fill.style.width = `${pct}%`;
+    });
 
     if (progressBar) {
+      const list = currentList();
+      const max = Math.max(list.length, 1);
       progressBar.setAttribute("aria-valuemin", "1");
-      progressBar.setAttribute("aria-valuemax", String(total));
-      progressBar.setAttribute("aria-valuenow", String(safeStep + 1));
+      progressBar.setAttribute("aria-valuemax", String(max));
+      progressBar.setAttribute("aria-valuenow", String(Math.min(index + 1, max)));
     }
   }
 

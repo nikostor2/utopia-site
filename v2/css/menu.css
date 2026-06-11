@@ -46,9 +46,6 @@
   visibility: hidden;
   pointer-events: none;
   background: var(--color-cream);
-  transform: translate3d(-100%, 0, 0);
-  transition: transform 0.45s var(--ease-cinematic);
-  will-change: transform;
 }
 
 .menu.is-open .menu__toolbar,
@@ -58,7 +55,6 @@
 
 .menu.is-open .menu__toolbar {
   pointer-events: auto;
-  transform: translate3d(0, 0, 0);
 }
 
 .menu__toolbar-btn {
@@ -116,13 +112,16 @@
 
 .menu__surface {
   position: absolute;
-  inset: 0;
+  top: var(--site-chrome-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   background: var(--color-cream);
   overflow: hidden;
-  transform: translate3d(-100%, 0, 0);
+  transform: translate3d(0, -100%, 0);
   transition: transform 0.45s var(--ease-cinematic);
   will-change: transform;
 }
@@ -139,7 +138,7 @@
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  padding: var(--site-chrome-height) 0 calc(var(--dock-safe) + 16px);
+  padding: 0 0 calc(var(--dock-safe) + 16px);
 }
 
 .menu__rule {
@@ -289,7 +288,6 @@ body.menu-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu__toolbar,
   .menu__surface {
     transition: none;
   }

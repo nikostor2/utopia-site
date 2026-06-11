@@ -2,9 +2,9 @@ export function initExperiences() {
   const stage = document.querySelector(".days__stage");
   const track = document.querySelector(".days__track");
   const progress = document.querySelector(".days__progress");
-  const progressFill = document.querySelector(".days__progress-fill");
+  const progressSegments = [...document.querySelectorAll(".days__progress-segment")];
   const caption = document.querySelector(".days__caption");
-  if (!stage || !track || !progress || !progressFill) return;
+  if (!stage || !track || !progress || progressSegments.length === 0) return;
 
   const slides = [...track.querySelectorAll(".days__card")];
   const hitPrev = stage.querySelector(".days__hit--prev");
@@ -119,8 +119,12 @@ export function initExperiences() {
     const label = slides[active]?.dataset.label || "";
     if (caption) caption.textContent = label;
 
-    const pct = count <= 1 ? 100 : ((active + 1) / count) * 100;
-    progressFill.style.width = `${pct}%`;
+    progressSegments.forEach((segment, segmentIndex) => {
+      const fill = segment.querySelector(".days__progress-fill");
+      if (!fill) return;
+      fill.style.width = segmentIndex === active ? "100%" : "0%";
+    });
+
     progress.setAttribute("aria-valuenow", String(active + 1));
     progress.setAttribute("aria-valuemax", String(count));
   }
