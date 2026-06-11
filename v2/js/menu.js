@@ -1,6 +1,8 @@
 import { collapseDestinations } from "./destinations-nav.js";
 import { setSiteLogoMenuOpen } from "./site-logo.js";
 
+const MENU_TRANSITION_MS = 450;
+
 export function initMenu() {
   const menu = document.getElementById("site-menu");
   const openToggles = document.querySelectorAll(".site-menu-open");
@@ -9,13 +11,19 @@ export function initMenu() {
 
   const destContainer = menu.querySelector("[data-destinations-nav]");
   const menuScroll = menu.querySelector(".menu__scroll");
+  const menuSurface = menu.querySelector(".menu__surface");
   const menuToolbar = menu.querySelector(".menu__toolbar");
   let savedScrollY = 0;
+  let closeTimer = null;
+
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   function setTogglesExpanded(open) {
     openToggles.forEach((toggle) => {
       toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Open menu" : "Open menu");
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     });
     menuToolbar?.setAttribute("aria-hidden", String(!open));
   }
@@ -47,9 +55,36 @@ export function initMenu() {
     });
   }
 
+  function isOpen() {
+    return menu.classList.contains("is-open");
+  }
+
+  function isMenuActive() {
+    return menu.classList.contains("is-open") || menu.classList.contains("is-closing");
+  }
+
+  function finishClose(onClosed) {
+    if (closeTimer) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+
+    menu.classList.remove("is-closing");
+    menu.setAttribute("aria-hidden", "true");
+    setTogglesExpanded(false);
+    unlockBodyScroll();
+    setSiteLogoMenuOpen(false);
+    menuScroll?.scrollTo(0, 0);
+    collapseDestinations(destContainer);
+    onClosed?.();
+  }
+
   function openMenu() {
+    if (isMenuActive()) return;
+
     lockBodyScroll();
     setSiteLogoMenuOpen(true);
+    menu.classList.remove("is-closing");
     menu.classList.add("is-open");
     menu.setAttribute("aria-hidden", "false");
     setTogglesExpanded(true);
@@ -57,19 +92,35 @@ export function initMenu() {
     menuScroll?.scrollTo(0, 0);
   }
 
-  function closeMenu() {
-    menu.classList.remove("is-open");
-    menu.setAttribute("aria-hidden", "true");
-    setTogglesExpanded(false);
-    unlockBodyScroll();
-    setSiteLogoMenuOpen(false);
-    document.body.classList.remove("menu-open");
-    menuScroll?.scrollTo(0, 0);
-    collapseDestinations(destContainer);
-  }
+  function closeMenu(onClosed) {
+    if (!isOpen() || menu.classList.contains("is-closing")) {
+      onClosed?.();
+      return;
+    }
 
-  function isOpen() {
-    return menu.classList.contains("is-open");
+    menu.classList.remove("is-open");
+    menu.classList.add("is-closing");
+    document.body.classList.remove("menu-open");
+    setTogglesExpanded(false);
+
+    if (prefersReducedMotion()) {
+      finishClose(onClosed);
+      return;
+    }
+
+    const complete = () => finishClose(onClosed);
+
+    const onTransitionEnd = (event) => {
+      if (event.target !== menuSurface || event.propertyName !== "transform") return;
+      menuSurface.removeEventListener("transitionend", onTransitionEnd);
+      complete();
+    };
+
+    menuSurface.addEventListener("transitionend", onTransitionEnd);
+    closeTimer = window.setTimeout(() => {
+      menuSurface.removeEventListener("transitionend", onTransitionEnd);
+      complete();
+    }, MENU_TRANSITION_MS + 50);
   }
 
   function navigateToHero(href) {
@@ -99,7 +150,7 @@ export function initMenu() {
 
   openToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
-      if (!isOpen()) openMenu();
+      if (!isMenuActive()) openMenu();
     });
   });
 
@@ -114,16 +165,14 @@ export function initMenu() {
       if (!isOpen()) return;
       e.preventDefault();
       const href = link.getAttribute("href") || "#top";
-      closeMenu();
-      requestAnimationFrame(() => navigateToHero(href));
+      closeMenu(() => requestAnimationFrame(() => navigateToHero(href)));
     });
   });
 
   menu.querySelectorAll(".menu__toolbar-logo").forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      closeMenu();
-      requestAnimationFrame(() => navigateToHero(link.getAttribute("href") || "#top"));
+      closeMenu(() => requestAnimationFrame(() => navigateToHero(link.getAttribute("href") || "#top")));
     });
   });
 

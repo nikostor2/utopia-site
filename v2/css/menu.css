@@ -16,9 +16,17 @@
   visibility: hidden;
 }
 
+.menu.is-open,
+.menu.is-closing {
+  visibility: visible;
+}
+
 .menu.is-open {
   pointer-events: auto;
-  visibility: visible;
+}
+
+.menu.is-closing {
+  pointer-events: none;
 }
 
 .menu__toolbar {
@@ -37,11 +45,20 @@
   margin: 0 auto;
   visibility: hidden;
   pointer-events: none;
+  background: var(--color-cream);
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.45s var(--ease-cinematic);
+  will-change: transform;
+}
+
+.menu.is-open .menu__toolbar,
+.menu.is-closing .menu__toolbar {
+  visibility: visible;
 }
 
 .menu.is-open .menu__toolbar {
-  visibility: visible;
   pointer-events: auto;
+  transform: translate3d(0, 0, 0);
 }
 
 .menu__toolbar-btn {
@@ -97,10 +114,6 @@
   height: 17px;
 }
 
-.menu.is-open .menu__toolbar {
-  background: var(--color-cream);
-}
-
 .menu__surface {
   position: absolute;
   inset: 0;
@@ -109,12 +122,13 @@
   min-height: 0;
   background: var(--color-cream);
   overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-cinematic);
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.45s var(--ease-cinematic);
+  will-change: transform;
 }
 
 .menu.is-open .menu__surface {
-  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 .menu__scroll {
@@ -272,5 +286,12 @@ a.menu__dest-property--active:focus-visible {
 body.menu-open {
   overflow: hidden;
   width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu__toolbar,
+  .menu__surface {
+    transition: none;
+  }
 }
 
