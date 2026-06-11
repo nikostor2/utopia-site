@@ -149,8 +149,25 @@ export function attachLazyVideo(video, { rootMargin = "160px", threshold = 0.15,
   const play = () => {
     ensureVideoSource(video, rawSrc);
     if (!autoplay) return;
-    const p = video.play();
-    if (p?.catch) p.catch(() => {});
+
+    const tryPlay = () => {
+      const p = video.play();
+      if (p?.catch) p.catch(() => {});
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      tryPlay();
+      return;
+    }
+
+    const onReady = () => {
+      video.removeEventListener("canplay", onReady);
+      video.removeEventListener("loadeddata", onReady);
+      tryPlay();
+    };
+
+    video.addEventListener("canplay", onReady);
+    video.addEventListener("loadeddata", onReady);
   };
 
   const pause = () => {

@@ -166,7 +166,14 @@ export function attachLazyVideo(video, { rootMargin = "160px", threshold = 0.15,
       return;
     }
 
-    video.addEventListener("canplay", tryPlay, { once: true });
+    const onReady = () => {
+      video.removeEventListener("canplay", onReady);
+      video.removeEventListener("loadeddata", onReady);
+      tryPlay();
+    };
+
+    video.addEventListener("canplay", onReady);
+    video.addEventListener("loadeddata", onReady);
   };
 
   const pause = () => {
