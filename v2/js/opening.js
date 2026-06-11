@@ -54,10 +54,20 @@ function getVideoLoadPercent(video) {
   return 8;
 }
 
+function getVideoPlaybackPercent(video) {
+  const duration = video?.duration;
+  if (!Number.isFinite(duration) || duration <= 0) return 0;
+
+  return Math.min(100, (video.currentTime / duration) * 100);
+}
+
 function resetProgressFill(section) {
   const fill = section.querySelector(".opening__progress-fill");
   const progress = section.querySelector(".opening__progress");
-  if (fill) fill.style.width = "0%";
+  if (fill) {
+    fill.style.width = "0%";
+    fill.classList.remove("is-playing");
+  }
   progress?.setAttribute("aria-valuenow", "0");
   progress?.classList.remove("is-loading");
 }
@@ -104,8 +114,11 @@ function bindVideoProgress(section, video) {
 
   let rafId = 0;
 
-  const setLoadingState = (loading) => {
-    progress?.classList.toggle("is-loading", loading);
+  const isVideoLoading = () => {
+    if (!video.src) return false;
+
+    const loadPct = getVideoLoadPercent(video);
+    return loadPct < 100 && video.readyState < HTMLMediaElement.HAVE_ENOUGH_DATA;
   };
 
   const update = () => {
@@ -113,25 +126,19 @@ function bindVideoProgress(section, video) {
 
     if (!video.src) {
       fill.style.width = "0%";
+      fill.classList.remove("is-playing");
       progress?.setAttribute("aria-valuenow", "0");
-      setLoadingState(false);
+      progress?.classList.remove("is-loading");
       return;
     }
 
-    const pct = getVideoLoadPercent(video);
-    const loading =
-      pct < 100 && video.readyState < HTMLMediaElement.HAVE_ENOUGH_DATA;
+    const loading = isVideoLoading();
+    progress?.classList.toggle("is-loading", loading);
+    fill.classList.toggle("is-playing", !loading);
 
-    setLoadingState(loading);
-
-    if (loading) {
-      fill.style.width = `${pct}%`;
-      progress?.setAttribute("aria-valuenow", String(pct));
-      return;
-    }
-
-    fill.style.width = "100%";
-    progress?.setAttribute("aria-valuenow", "100");
+    const pct = loading ? getVideoLoadPercent(video) : getVideoPlaybackPercent(video);
+    fill.style.width = `${pct}%`;
+    progress?.setAttribute("aria-valuenow", String(Math.round(pct)));
   };
 
   const scheduleUpdate = () => {
@@ -148,6 +155,10 @@ function bindVideoProgress(section, video) {
     "canplaythrough",
     "waiting",
     "playing",
+    "timeupdate",
+    "seeking",
+    "seeked",
+    "ended",
   ];
 
   events.forEach((eventName) => {

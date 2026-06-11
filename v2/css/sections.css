@@ -601,6 +601,10 @@ video.opening__bg-media {
   transition: width 0.2s linear;
 }
 
+.opening__progress-fill.is-playing {
+  transition: none;
+}
+
 .opening__progress-dot {
   flex: none;
   width: 4px;
@@ -615,6 +619,10 @@ video.opening__bg-media {
   }
 
   .opening__progress-fill {
+    transition: none;
+  }
+
+  .opening__progress-fill.is-playing {
     transition: none;
   }
 }
