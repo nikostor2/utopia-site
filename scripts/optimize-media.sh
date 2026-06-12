@@ -14,6 +14,24 @@ CARD_Q=90
 VIDEO_MAX_W=1080
 VIDEO_CRF=16
 VIDEO_PRESET=slow
+WEBM_CRF=32
+WEBM_CPU=2
+
+if ! ffmpeg -hide_banner -encoders 2>/dev/null | grep -q libvpx-vp9; then
+  echo "⚠ ffmpeg lacks libvpx-vp9 — skipping WebM (conda-forge: conda install -c conda-forge ffmpeg)" >&2
+  encode_webm() { :; }
+else
+  encode_webm() {
+    local input="$1"
+    local output="$2"
+    local max_w="${3:-$VIDEO_MAX_W}"
+    ffmpeg -y -i "$input" \
+      -vf "scale='min(${max_w},iw)':-2:flags=lanczos" \
+      -c:v libvpx-vp9 -crf "$WEBM_CRF" -b:v 0 -row-mt 1 \
+      -deadline good -cpu-used "$WEBM_CPU" \
+      -an "$output"
+  }
+fi
 
 echo "→ Full-bleed images (max ${FULL_BLEED_MAX}px, JPEG q${FULL_BLEED_Q})"
 for f in "$ASSETS"/enhanced_hero-*.png "$ASSETS"/enhanced_ecosystem-*.png; do
@@ -44,7 +62,10 @@ for v in kitesurf tropics wellness jet yacht; do
     -c:v libx264 -profile:v high -pix_fmt yuv420p \
     -crf "$VIDEO_CRF" -preset "$VIDEO_PRESET" \
     -movflags +faststart -an "$OPT/${v}.mp4" 2>/dev/null
+  encode_webm "$OPT/${v}.mp4" "$OPT/${v}.webm"
 done
+
+echo "→ WebM delivery (VP9 CRF ${WEBM_CRF})"
 
 if [[ -f "$ASSETS/footer.mp4" ]]; then
   echo "→ Footer / CTA video (stream copy + faststart, no re-encode)"
@@ -52,6 +73,7 @@ if [[ -f "$ASSETS/footer.mp4" ]]; then
     && mv "$ASSETS/footer-faststart.mp4" "$ASSETS/footer.mp4"
   ffmpeg -y -i "$ASSETS/footer.mp4" -vf "scale='min(2048,iw)':-2:flags=lanczos" -vframes 1 -q:v 2 \
     "$OPT/cta-footer-poster.jpg" 2>/dev/null
+  encode_webm "$ASSETS/footer.mp4" "$ASSETS/footer.webm" 2048
 fi
 
 echo "Done. Bump MEDIA_VERSION in js/lazy-media.js after deploy."

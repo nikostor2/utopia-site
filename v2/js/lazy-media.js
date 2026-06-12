@@ -1,7 +1,7 @@
 const ECOSYSTEM_GRADIENT =
   "linear-gradient(180deg, rgba(51, 47, 46, 0) 86.13%, #332f2e 108.21%)";
 
-export const MEDIA_VERSION = "20260610-2700";
+export const MEDIA_VERSION = "20260612-1200";
 
 /** No re-encode — keeps full source bitrate (footer CTA). */
 const SOURCE_ONLY_VIDEOS = new Set(["footer"]);
@@ -106,31 +106,80 @@ export function prefetchImages(urls) {
   urls.forEach(prefetchImage);
 }
 
-export function resolveVideoUrl(url) {
-  if (!url) return url;
+let supportsWebM;
+
+/** Prefer VP9 WebM where supported; MP4 fallback elsewhere (older Safari). */
+export function prefersWebMVideo() {
+  if (supportsWebM !== undefined) return supportsWebM;
+
+  const probe = document.createElement("video");
+  supportsWebM =
+    probe.canPlayType('video/webm; codecs="vp9"') !== "" ||
+    probe.canPlayType("video/webm") !== "";
+
+  return supportsWebM;
+}
+
+function parseVideoAsset(url) {
+  if (!url) return null;
+
   const [path, query] = url.split("?");
-  const match = path.match(/(?:^|\/)assets\/(.+)\.mp4$/i);
-  if (!match) return url;
+  const match = path.match(/(?:^|\/)assets\/(.+)\.(mp4|webm)$/i);
+  if (!match) return null;
 
-  const name = match[1];
-  const assetRoot = path.includes("../") ? "../assets" : "assets";
+  return {
+    name: match[1],
+    assetRoot: path.includes("../") ? "../assets" : "assets",
+    query,
+  };
+}
 
+export function resolveVideoUrl(url, { format } = {}) {
+  const asset = parseVideoAsset(url);
+  if (!asset) return url;
+
+  const useWebM = format === "webm" || (format !== "mp4" && prefersWebMVideo());
+  const ext = useWebM ? "webm" : "mp4";
+  const { name, assetRoot, query } = asset;
+
+  let delivery;
   if (SOURCE_ONLY_VIDEOS.has(name)) {
-    const versioned = `${assetRoot}/${name}.mp4?v=${MEDIA_VERSION}`;
-    return query && !query.includes("v=") ? `${versioned}&${query}` : versioned;
+    delivery = `${assetRoot}/${name}.${ext}?v=${MEDIA_VERSION}`;
+  } else {
+    delivery = `${assetRoot}/opt/${name}.${ext}?v=${MEDIA_VERSION}`;
   }
 
-  return `../assets/opt/${name}.mp4?v=${MEDIA_VERSION}`;
+  if (query && !query.includes("v=")) {
+    delivery = `${delivery}&${query}`;
+  }
+
+  return delivery;
 }
 
 export function ensureVideoSource(video, url) {
   if (!video || !url) return;
-  const deliveryUrl = resolveVideoUrl(url);
-  if (video.dataset.loadedUrl === deliveryUrl) return;
 
-  video.src = deliveryUrl;
-  video.dataset.loadedUrl = deliveryUrl;
-  video.load();
+  const primary = resolveVideoUrl(url);
+  if (video.dataset.loadedUrl === primary) return;
+
+  const applySource = (src) => {
+    video.src = src;
+    video.dataset.loadedUrl = src;
+    video.load();
+  };
+
+  const onError = () => {
+    video.removeEventListener("error", onError);
+    const fallback = resolveVideoUrl(url, { format: "mp4" });
+    if (fallback === primary || video.dataset.loadedUrl === fallback) return;
+    applySource(fallback);
+  };
+
+  if (primary.includes(".webm")) {
+    video.addEventListener("error", onError, { once: true });
+  }
+
+  applySource(primary);
 }
 
 export function clearVideoSource(video) {
