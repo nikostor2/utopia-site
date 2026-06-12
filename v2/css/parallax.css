@@ -39,7 +39,8 @@
     margin-top: 0;
     max-width: none;
     object-fit: cover;
-    object-position: center;
+    object-position: center 35%;
+    transform-origin: center 35%;
   }
 
   .cta-final__bg [data-parallax] {

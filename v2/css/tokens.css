@@ -61,7 +61,7 @@
   --days-stage-max: min(412px, var(--app-width));
   --stage-media-height: 462px;
   --beyond-pad: var(--space-sm);
-  --beyond-card-width: calc(var(--app-width) - var(--beyond-pad) * 2);
+  --beyond-card-width: min(346px, calc(var(--max-width) - var(--beyond-pad) * 2));
   --beyond-card-height: calc(var(--beyond-card-width) * 420 / 314);
   --beyond-card-inner-gap: var(--space-sm);
   --beyond-card-media-inset-x: var(--space-sm);

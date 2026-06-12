@@ -682,9 +682,10 @@ video.opening__bg-media {
 .beyond__card {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  gap: var(--beyond-card-inner-gap);
   width: 100%;
   height: var(--beyond-card-height);
+  min-height: var(--beyond-card-height);
+  max-height: var(--beyond-card-height);
   box-sizing: border-box;
   border: 1px solid var(--color-cream-warm);
   border-radius: var(--radius-card);
@@ -718,7 +719,8 @@ video.opening__bg-media {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  min-height: 0;
 }
 
 .beyond__image {
@@ -748,7 +750,6 @@ video.opening__bg-media {
   display: flex;
   flex-direction: column;
   gap: var(--space-xxs);
-  align-self: stretch;
   padding: 0 var(--space-md) var(--space-md);
   box-sizing: border-box;
 }
@@ -945,6 +946,7 @@ video.opening__bg-media {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 35%;
   background: #d9d9d9;
   transition: opacity 0.35s var(--ease-cinematic);
 }
@@ -985,7 +987,7 @@ video.opening__bg-media {
   margin: 0;
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: var(--text-sans-sm);
+  font-size: var(--text-sans-base);
   line-height: var(--leading-sans);
   color: #161514;
 }

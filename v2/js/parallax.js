@@ -33,7 +33,7 @@ export function initParallax() {
 
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
 
-    const strength = el.closest(".days__card") ? SHIFT_PX * 0.75 : SHIFT_PX;
+    const strength = el.closest(".days__card") ? SHIFT_PX * 0.25 : SHIFT_PX;
     const y = offsetFor(rect, strength);
     let scale = SCALE_IMG;
     if (kind === "bg") scale = SCALE_BG;
