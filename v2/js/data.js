@@ -106,7 +106,7 @@ export const OPENING_SLIDES = [
     mediaLeft: "calc(50% - 348px + 143px)",
   },
   {
-    label: "Tropics Exploration",
+    label: "Dunes Exploration",
     video: "../assets/tropics.mp4?v=20260610-2700",
     poster: "../assets/opt/opening-tropics.jpg",
     mediaWidth: 394,
