@@ -106,14 +106,14 @@ export const OPENING_SLIDES = [
     mediaLeft: "calc(50% - 348px + 143px)",
   },
   {
-    label: "Tropics Exploration",
+    label: "Dunes Exploration",
     video: "assets/tropics.mp4?v=20260610-2700",
     poster: "assets/opt/opening-tropics.jpg?v=20260612-1540",
     mediaWidth: 394,
     mediaLeft: "calc(50% - 197px - 8px)",
   },
   {
-    label: "Wellness",
+    label: "Local Vibes",
     video: "assets/wellness.mp4",
     poster: "assets/opt/opening-wellness.jpg?v=20260612-1540",
     mediaWidth: 408,
